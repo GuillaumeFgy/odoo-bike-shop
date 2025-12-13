@@ -1,0 +1,6 @@
+id,model,name,sequence,hourly_rate,daily_rate,weekly_rate,monthly_rate,description
+category_city,bike.category,Vélo de Ville,10,3.0,15.0,70.0,200.0,Vélos confortables pour une utilisation urbaine quotidienne
+category_mountain,bike.category,VTT,20,5.0,25.0,120.0,350.0,Vélos tout-terrain pour les sentiers et chemins accidentés
+category_road,bike.category,Vélo de Route,30,6.0,30.0,140.0,400.0,Vélos rapides et légers pour la route et le cyclisme sportif
+category_electric,bike.category,Vélo Électrique,40,8.0,40.0,200.0,600.0,Vélos à assistance électrique pour des trajets sans effort
+category_kids,bike.category,Vélo Enfant,50,2.0,10.0,50.0,150.0,Vélos adaptés aux enfants de différents âges
