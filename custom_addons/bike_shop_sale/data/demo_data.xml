@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Produits vélos à vendre -->
+        <record id="product_bike_trek_city" model="product.template">
+            <field name="name">TREK City Commuter 2024</field>
+            <field name="bike_shop_type">bike</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_bikes"/>
+            <field name="bike_category_id" ref="bike_shop_rental.category_city"/>
+            <field name="bike_brand">TREK</field>
+            <field name="bike_model">City Commuter</field>
+            <field name="bike_year">2024</field>
+            <field name="bike_frame_size">m</field>
+            <field name="bike_color">Bleu</field>
+            <field name="bike_weight">13.5</field>
+            <field name="bike_condition">new</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">899.00</field>
+            <field name="standard_price">650.00</field>
+            <field name="warranty_months">24</field>
+            <field name="description_sale">Vélo de ville confortable et élégant pour vos déplacements quotidiens.</field>
+        </record>
+
+        <record id="product_bike_specialized_mtb" model="product.template">
+            <field name="name">SPECIALIZED Mountain X5 Pro</field>
+            <field name="bike_shop_type">bike</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_bikes"/>
+            <field name="bike_category_id" ref="bike_shop_rental.category_mountain"/>
+            <field name="bike_brand">SPECIALIZED</field>
+            <field name="bike_model">Mountain X5 Pro</field>
+            <field name="bike_year">2024</field>
+            <field name="bike_frame_size">l</field>
+            <field name="bike_color">Noir/Rouge</field>
+            <field name="bike_weight">12.8</field>
+            <field name="bike_condition">new</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">1599.00</field>
+            <field name="standard_price">1150.00</field>
+            <field name="warranty_months">24</field>
+            <field name="description_sale">VTT performant pour les terrains les plus exigeants.</field>
+        </record>
+
+        <record id="product_bike_giant_road" model="product.template">
+            <field name="name">GIANT Road Pro Carbon</field>
+            <field name="bike_shop_type">bike</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_bikes"/>
+            <field name="bike_category_id" ref="bike_shop_rental.category_road"/>
+            <field name="bike_brand">GIANT</field>
+            <field name="bike_model">Road Pro Carbon</field>
+            <field name="bike_year">2024</field>
+            <field name="bike_frame_size">m</field>
+            <field name="bike_color">Blanc/Noir</field>
+            <field name="bike_weight">8.2</field>
+            <field name="bike_condition">new</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">2299.00</field>
+            <field name="standard_price">1650.00</field>
+            <field name="warranty_months">36</field>
+            <field name="description_sale">Vélo de route ultra-léger en carbone pour les cyclistes exigeants.</field>
+        </record>
+
+        <record id="product_bike_bosch_electric" model="product.template">
+            <field name="name">BOSCH E-Bike Urban Plus</field>
+            <field name="bike_shop_type">bike</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_bikes"/>
+            <field name="bike_category_id" ref="bike_shop_rental.category_electric"/>
+            <field name="bike_brand">BOSCH</field>
+            <field name="bike_model">E-Bike Urban Plus</field>
+            <field name="bike_year">2024</field>
+            <field name="bike_frame_size">m</field>
+            <field name="bike_color">Gris Anthracite</field>
+            <field name="bike_weight">22.5</field>
+            <field name="bike_condition">new</field>
+            <field name="is_electric">True</field>
+            <field name="battery_capacity">500</field>
+            <field name="max_speed">25</field>
+            <field name="range_km">120</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">2799.00</field>
+            <field name="standard_price">2050.00</field>
+            <field name="warranty_months">24</field>
+            <field name="description_sale">Vélo électrique haut de gamme avec batterie longue durée.</field>
+        </record>
+
+        <!-- Accessoires -->
+        <record id="product_helmet_adult" model="product.template">
+            <field name="name">Casque Adulte Pro Safety</field>
+            <field name="bike_shop_type">accessory</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_accessories"/>
+            <field name="accessory_type">helmet</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">59.99</field>
+            <field name="standard_price">35.00</field>
+            <field name="warranty_months">12</field>
+        </record>
+
+        <record id="product_lock_ulock" model="product.template">
+            <field name="name">Antivol U-Lock Haute Sécurité</field>
+            <field name="bike_shop_type">accessory</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_accessories"/>
+            <field name="accessory_type">lock</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">49.99</field>
+            <field name="standard_price">28.00</field>
+            <field name="warranty_months">24</field>
+        </record>
+
+        <record id="product_light_set" model="product.template">
+            <field name="name">Kit Éclairage LED Avant/Arrière</field>
+            <field name="bike_shop_type">accessory</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_accessories"/>
+            <field name="accessory_type">light</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">39.99</field>
+            <field name="standard_price">22.00</field>
+            <field name="warranty_months">12</field>
+        </record>
+
+        <record id="product_pump_portable" model="product.template">
+            <field name="name">Pompe Portable Mini Pro</field>
+            <field name="bike_shop_type">accessory</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_accessories"/>
+            <field name="accessory_type">pump</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">24.99</field>
+            <field name="standard_price">14.00</field>
+            <field name="warranty_months">12</field>
+        </record>
+
+        <!-- Pièces détachées -->
+        <record id="product_tire_road" model="product.template">
+            <field name="name">Pneu Route 700x25C</field>
+            <field name="bike_shop_type">part</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_parts"/>
+            <field name="part_type">tire</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">29.99</field>
+            <field name="standard_price">18.00</field>
+        </record>
+
+        <record id="product_tube_standard" model="product.template">
+            <field name="name">Chambre à Air Standard 700C</field>
+            <field name="bike_shop_type">part</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_parts"/>
+            <field name="part_type">tube</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">7.99</field>
+            <field name="standard_price">4.50</field>
+        </record>
+
+        <record id="product_chain_11speed" model="product.template">
+            <field name="name">Chaîne 11 Vitesses</field>
+            <field name="bike_shop_type">part</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_parts"/>
+            <field name="part_type">chain</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">39.99</field>
+            <field name="standard_price">24.00</field>
+        </record>
+
+        <record id="product_brake_pads" model="product.template">
+            <field name="name">Plaquettes de Frein Hydrauliques</field>
+            <field name="bike_shop_type">part</field>
+            <field name="categ_id" ref="bike_shop_rental.product_category_parts"/>
+            <field name="part_type">brake</field>
+            <field name="type">product</field>
+            <field name="detailed_type">product</field>
+            <field name="list_price">19.99</field>
+            <field name="standard_price">11.00</field>
+        </record>
+
+        <!-- Commande de vente de démonstration -->
+        <record id="demo_sale_order_1" model="sale.order">
+            <field name="partner_id" ref="bike_shop_rental.demo_partner_1"/>
+            <field name="date_order" eval="(datetime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+            <field name="state">sale</field>
+        </record>
+
+        <record id="demo_sale_order_line_1_1" model="sale.order.line">
+            <field name="order_id" ref="demo_sale_order_1"/>
+            <field name="product_id" ref="product_bike_trek_city"/>
+            <field name="product_uom_qty">1</field>
+        </record>
+
+        <record id="demo_sale_order_line_1_2" model="sale.order.line">
+            <field name="order_id" ref="demo_sale_order_1"/>
+            <field name="product_id" ref="product_helmet_adult"/>
+            <field name="product_uom_qty">1</field>
+        </record>
+
+        <record id="demo_sale_order_line_1_3" model="sale.order.line">
+            <field name="order_id" ref="demo_sale_order_1"/>
+            <field name="product_id" ref="product_lock_ulock"/>
+            <field name="product_uom_qty">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Pivot pour l'analyse des locations -->
+    <record id="view_rental_report_pivot" model="ir.ui.view">
+        <field name="name">rental.report.pivot</field>
+        <field name="model">rental.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des Locations">
+                <field name="bike_category_id" type="row"/>
+                <field name="rental_type" type="col"/>
+                <field name="total_amount" type="measure"/>
+                <field name="duration_days" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Vue Graph pour l'analyse des locations -->
+    <record id="view_rental_report_graph" model="ir.ui.view">
+        <field name="name">rental.report.graph</field>
+        <field name="model">rental.report</field>
+        <field name="arch" type="xml">
+            <graph string="Analyse des Locations" type="bar">
+                <field name="bike_category_id"/>
+                <field name="total_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vue Tree pour l'analyse des locations -->
+    <record id="view_rental_report_tree" model="ir.ui.view">
+        <field name="name">rental.report.tree</field>
+        <field name="model">rental.report</field>
+        <field name="arch" type="xml">
+            <list string="Rapport de Locations">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="bike_id"/>
+                <field name="bike_category_id"/>
+                <field name="start_date"/>
+                <field name="rental_type"/>
+                <field name="duration_days"/>
+                <field name="total_amount" sum="Total"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action pour le rapport des locations -->
+    <record id="action_rental_report" model="ir.actions.act_window">
+        <field name="name">Analyse des Locations</field>
+        <field name="res_model">rental.report</field>
+        <field name="view_mode">graph,pivot,tree</field>
+        <field name="context">{}</field>
+    </record>
+
+    <!-- Vue pour le rapport d'occupation -->
+    <record id="view_bike_occupancy_report_tree" model="ir.ui.view">
+        <field name="name">bike.occupancy.report.tree</field>
+        <field name="model">bike.occupancy.report</field>
+        <field name="arch" type="xml">
+            <list string="Taux d'Occupation des Vélos" default_order="total_revenue desc">
+                <field name="bike_id"/>
+                <field name="bike_category_id"/>
+                <field name="total_rentals" sum="Total Locations"/>
+                <field name="total_days_rented" sum="Total Jours"/>
+                <field name="total_revenue" sum="Total Revenus" widget="monetary"/>
+                <field name="avg_rental_duration" avg="Moyenne"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_bike_occupancy_report_graph" model="ir.ui.view">
+        <field name="name">bike.occupancy.report.graph</field>
+        <field name="model">bike.occupancy.report</field>
+        <field name="arch" type="xml">
+            <graph string="Taux d'Occupation" type="bar">
+                <field name="bike_id"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="total_days_rented" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Action pour le rapport d'occupation -->
+    <record id="action_bike_occupancy_report" model="ir.actions.act_window">
+        <field name="name">Taux d'Occupation des Vélos</field>
+        <field name="res_model">bike.occupancy.report</field>
+        <field name="view_mode">tree,graph</field>
+    </record>
+
+    <!-- Menus pour les rapports -->
+    <menuitem id="menu_bike_shop_reports"
+              name="Rapports"
+              parent="bike_shop_rental.menu_bike_shop_root"
+              sequence="80"/>
+
+    <menuitem id="menu_rental_report"
+              name="Analyse des Locations"
+              parent="menu_bike_shop_reports"
+              action="action_rental_report"
+              sequence="10"/>
+
+    <menuitem id="menu_bike_occupancy_report"
+              name="Taux d'Occupation"
+              parent="menu_bike_shop_reports"
+              action="action_bike_occupancy_report"
+              sequence="20"/>
+</odoo>

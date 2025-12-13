@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extension de la vue form des commandes de vente -->
+    <record id="view_sale_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit.bike.shop</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <!-- Ajout du compteur de vélos dans l'en-tête -->
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="bike_count" invisible="bike_count == 0"/>
+            </xpath>
+
+            <!-- Ajout des champs bike dans les lignes de commande -->
+            <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+                <field name="bike_category" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action pour les commandes de vente -->
+    <record id="action_sale_order_bike_shop" model="ir.actions.act_window">
+        <field name="name">Commandes de Vente</field>
+        <field name="res_model">sale.order</field>
+        <field name="view_mode">tree,form,kanban</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+    </record>
+</odoo>

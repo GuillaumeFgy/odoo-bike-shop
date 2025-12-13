@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template principal pour le contrat de location -->
+    <template id="report_rental_contract">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2 class="text-center">
+                            <strong>CONTRAT DE LOCATION DE VÉLO</strong>
+                        </h2>
+                        <h3 class="text-center">
+                            <span t-field="doc.name"/>
+                        </h3>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Informations Client:</strong>
+                                <div t-field="doc.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name", "phone", "email"]}'/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Informations Vélo:</strong>
+                                <div>
+                                    <strong>Vélo:</strong> <span t-field="doc.bike_id.name"/>
+                                </div>
+                                <div>
+                                    <strong>Catégorie:</strong> <span t-field="doc.bike_category"/>
+                                </div>
+                                <div>
+                                    <strong>Marque:</strong> <span t-field="doc.bike_id.brand"/>
+                                </div>
+                                <div>
+                                    <strong>Modèle:</strong> <span t-field="doc.bike_id.model"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-12">
+                                <h4><strong>Période de Location</strong></h4>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Date de début:</strong></td>
+                                        <td><span t-field="doc.start_date" t-options='{"widget": "datetime"}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date de fin:</strong></td>
+                                        <td><span t-field="doc.end_date" t-options='{"widget": "datetime"}'/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Durée:</strong></td>
+                                        <td>
+                                            <span t-field="doc.duration_days"/> jours
+                                            (<span t-field="doc.duration_hours"/> heures)
+                                        </td>
+                                    </tr>
+                                    <tr t-if="doc.actual_return_date">
+                                        <td><strong>Date de retour réelle:</strong></td>
+                                        <td><span t-field="doc.actual_return_date" t-options='{"widget": "datetime"}'/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt32 mb32">
+                            <div class="col-12">
+                                <h4><strong>Détails Financiers</strong></h4>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Type de Location</th>
+                                            <th>Prix Unitaire</th>
+                                            <th>Quantité</th>
+                                            <th class="text-right">Sous-total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><span t-field="doc.rental_type"/></td>
+                                            <td><span t-field="doc.unit_price" t-options='{"widget": "monetary", "display_currency": doc.company_id.currency_id}'/></td>
+                                            <td><span t-field="doc.quantity"/></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.subtotal" t-options='{"widget": "monetary", "display_currency": doc.company_id.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right"><strong>Caution:</strong></td>
+                                            <td class="text-right">
+                                                <span t-field="doc.deposit_amount" t-options='{"widget": "monetary", "display_currency": doc.company_id.currency_id}'/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3" class="text-right"><strong>TOTAL:</strong></td>
+                                            <td class="text-right">
+                                                <strong>
+                                                    <span t-field="doc.total_amount" t-options='{"widget": "monetary", "display_currency": doc.company_id.currency_id}'/>
+                                                </strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="row mt32 mb32" t-if="doc.notes">
+                            <div class="col-12">
+                                <h4><strong>Notes</strong></h4>
+                                <p t-field="doc.notes"/>
+                            </div>
+                        </div>
+
+                        <div class="row mt64">
+                            <div class="col-6">
+                                <p><strong>Signature du Client:</strong></p>
+                                <p><br/><br/></p>
+                                <p>_____________________</p>
+                                <p>Date: _______________</p>
+                            </div>
+                            <div class="col-6">
+                                <p><strong>Signature du Responsable:</strong></p>
+                                <p><br/><br/></p>
+                                <p>_____________________</p>
+                                <p>Date: _______________</p>
+                            </div>
+                        </div>
+
+                        <div class="row mt32">
+                            <div class="col-12">
+                                <p class="text-muted small">
+                                    <strong>Conditions générales:</strong><br/>
+                                    Le locataire s'engage à restituer le vélo dans le même état qu'au moment de la location.
+                                    Tout dommage constaté sera facturé au locataire.
+                                    La caution sera restituée après vérification de l'état du vélo.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

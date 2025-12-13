@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Section Vente dans le menu principal Bike Shop -->
+    <menuitem id="menu_bike_shop_sale"
+              name="Vente"
+              parent="bike_shop_rental.menu_bike_shop_root"
+              sequence="20"/>
+
+    <menuitem id="menu_sale_order"
+              name="Commandes de Vente"
+              parent="menu_bike_shop_sale"
+              action="action_sale_order_bike_shop"
+              sequence="10"/>
+
+    <menuitem id="menu_product_bike"
+              name="Vélos à Vendre"
+              parent="menu_bike_shop_sale"
+              action="action_product_bike"
+              sequence="20"/>
+
+    <menuitem id="menu_product_accessory"
+              name="Accessoires"
+              parent="menu_bike_shop_sale"
+              action="action_product_accessory"
+              sequence="30"/>
+
+    <menuitem id="menu_product_part"
+              name="Pièces Détachées"
+              parent="menu_bike_shop_sale"
+              action="action_product_part"
+              sequence="40"/>
+
+    <!-- Lien vers Stock -->
+    <menuitem id="menu_stock_bike_shop"
+              name="Stock"
+              parent="bike_shop_rental.menu_bike_shop_root"
+              action="stock.stock_picking_action_picking_type"
+              sequence="30"/>
+</odoo>

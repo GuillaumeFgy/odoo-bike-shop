@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Menu principal -->
+    <menuitem id="menu_bike_shop_root"
+              name="Bike Shop"
+              sequence="10"
+              web_icon="bike_shop_rental,static/description/icon.png"/>
+
+    <!-- Section Location -->
+    <menuitem id="menu_bike_shop_rental"
+              name="Location"
+              parent="menu_bike_shop_root"
+              sequence="10"/>
+
+    <menuitem id="menu_rental_order"
+              name="Contrats de Location"
+              parent="menu_bike_shop_rental"
+              action="action_rental_order"
+              sequence="10"/>
+
+    <menuitem id="menu_bike"
+              name="Vélos"
+              parent="menu_bike_shop_rental"
+              action="action_bike"
+              sequence="20"/>
+
+    <!-- Section Configuration -->
+    <menuitem id="menu_bike_shop_config"
+              name="Configuration"
+              parent="menu_bike_shop_root"
+              sequence="90"/>
+
+    <menuitem id="menu_bike_category"
+              name="Catégories de Vélos"
+              parent="menu_bike_shop_config"
+              action="action_bike_category"
+              sequence="10"/>
+</odoo>
