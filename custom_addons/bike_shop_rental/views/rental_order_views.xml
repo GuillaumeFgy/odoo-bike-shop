@@ -5,7 +5,7 @@
         <field name="name">rental.order.tree</field>
         <field name="model">rental.order</field>
         <field name="arch" type="xml">
-            <list string="Contrats de Location"
+            <tree string="Contrats de Location"
                   decoration-info="state=='draft'"
                   decoration-primary="state=='confirmed'"
                   decoration-success="state=='done'"
@@ -17,7 +17,7 @@
                 <field name="start_date"/>
                 <field name="end_date"/>
                 <field name="rental_type"/>
-                <field name="total_amount" widget="monetary"/>
+                <field name="total_amount" />
                 <field name="state" widget="badge"
                        decoration-info="state=='draft'"
                        decoration-primary="state=='confirmed'"
@@ -27,7 +27,7 @@
                 <field name="invoice_status" widget="badge"
                        decoration-warning="invoice_status=='not_invoiced'"
                        decoration-success="invoice_status=='paid'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -91,11 +91,11 @@
                     <group>
                         <group name="pricing" string="Tarification">
                             <field name="rental_type"/>
-                            <field name="unit_price" widget="monetary"/>
+                            <field name="unit_price" />
                             <field name="quantity"/>
-                            <field name="subtotal" widget="monetary"/>
-                            <field name="deposit_amount" widget="monetary"/>
-                            <field name="total_amount" widget="monetary"
+                            <field name="subtotal" />
+                            <field name="deposit_amount" />
+                            <field name="total_amount" 
                                    class="oe_subtotal_footer_separator"/>
                         </group>
                         <group name="invoicing" string="Facturation">

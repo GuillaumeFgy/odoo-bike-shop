@@ -71,16 +71,16 @@
         <field name="name">product.template.tree.bike</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <list string="Vélos">
+            <tree string="Vélos">
                 <field name="name"/>
                 <field name="bike_category_id"/>
                 <field name="bike_brand"/>
                 <field name="bike_model"/>
                 <field name="bike_condition"/>
-                <field name="list_price" widget="monetary"/>
+                <field name="list_price" />
                 <field name="qty_available"/>
                 <field name="is_electric" widget="boolean"/>
-            </list>
+            </tree>
         </field>
     </record>
 

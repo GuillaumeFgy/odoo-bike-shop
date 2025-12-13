@@ -31,7 +31,7 @@
         <field name="name">rental.report.tree</field>
         <field name="model">rental.report</field>
         <field name="arch" type="xml">
-            <list string="Rapport de Locations">
+            <tree string="Rapport de Locations">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="bike_id"/>
@@ -41,7 +41,7 @@
                 <field name="duration_days"/>
                 <field name="total_amount" sum="Total"/>
                 <field name="state"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -58,14 +58,14 @@
         <field name="name">bike.occupancy.report.tree</field>
         <field name="model">bike.occupancy.report</field>
         <field name="arch" type="xml">
-            <list string="Taux d'Occupation des Vélos" default_order="total_revenue desc">
+            <tree string="Taux d'Occupation des Vélos" default_order="total_revenue desc">
                 <field name="bike_id"/>
                 <field name="bike_category_id"/>
                 <field name="total_rentals" sum="Total Locations"/>
                 <field name="total_days_rented" sum="Total Jours"/>
-                <field name="total_revenue" sum="Total Revenus" widget="monetary"/>
+                <field name="total_revenue" sum="Total Revenus" />
                 <field name="avg_rental_duration" avg="Moyenne"/>
-            </list>
+            </tree>
         </field>
     </record>
 

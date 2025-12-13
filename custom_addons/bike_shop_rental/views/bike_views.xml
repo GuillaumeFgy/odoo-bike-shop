@@ -5,7 +5,7 @@
         <field name="name">bike.bike.tree</field>
         <field name="model">bike.bike</field>
         <field name="arch" type="xml">
-            <list string="Vélos" decoration-success="state=='available'"
+            <tree string="Vélos" decoration-success="state=='available'"
                   decoration-warning="state=='maintenance'"
                   decoration-danger="state=='rented'">
                 <field name="name"/>
@@ -17,9 +17,9 @@
                        decoration-success="state=='available'"
                        decoration-warning="state=='maintenance'"
                        decoration-danger="state=='rented'"/>
-                <field name="daily_rate" widget="monetary"/>
+                <field name="daily_rate" />
                 <field name="rental_count"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -66,12 +66,12 @@
                         <page string="Tarification" name="pricing">
                             <group>
                                 <group>
-                                    <field name="hourly_rate" widget="monetary"/>
-                                    <field name="daily_rate" widget="monetary"/>
+                                    <field name="hourly_rate" />
+                                    <field name="daily_rate" />
                                 </group>
                                 <group>
-                                    <field name="weekly_rate" widget="monetary"/>
-                                    <field name="monthly_rate" widget="monetary"/>
+                                    <field name="weekly_rate" />
+                                    <field name="monthly_rate" />
                                 </group>
                             </group>
                         </page>
@@ -192,15 +192,15 @@
         <field name="name">bike.category.tree</field>
         <field name="model">bike.category</field>
         <field name="arch" type="xml">
-            <list string="Catégories de Vélos">
+            <tree string="Catégories de Vélos">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
-                <field name="hourly_rate" widget="monetary"/>
-                <field name="daily_rate" widget="monetary"/>
-                <field name="weekly_rate" widget="monetary"/>
-                <field name="monthly_rate" widget="monetary"/>
+                <field name="hourly_rate" />
+                <field name="daily_rate" />
+                <field name="weekly_rate" />
+                <field name="monthly_rate" />
                 <field name="bike_count"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -218,12 +218,12 @@
                     </group>
                     <group string="Tarification par Défaut">
                         <group>
-                            <field name="hourly_rate" widget="monetary"/>
-                            <field name="daily_rate" widget="monetary"/>
+                            <field name="hourly_rate" />
+                            <field name="daily_rate" />
                         </group>
                         <group>
-                            <field name="weekly_rate" widget="monetary"/>
-                            <field name="monthly_rate" widget="monetary"/>
+                            <field name="weekly_rate" />
+                            <field name="monthly_rate" />
                         </group>
                     </group>
                     <group>
