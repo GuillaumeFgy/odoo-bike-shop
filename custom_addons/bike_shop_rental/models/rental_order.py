@@ -131,12 +131,13 @@ class RentalOrder(models.Model):
     notes = fields.Text(string='Notes')
     damage_report = fields.Text(string='Rapport de Dommages')
 
-    @api.model
-    def create(self, vals):
+    @api.model_create_multi
+    def create(self, vals_list):
         """Génère automatiquement le numéro de contrat"""
-        if vals.get('name', 'Nouveau') == 'Nouveau':
-            vals['name'] = self.env['ir.sequence'].next_by_code('rental.order') or 'Nouveau'
-        return super(RentalOrder, self).create(vals)
+        for vals in vals_list:
+            if vals.get('name', 'Nouveau') == 'Nouveau':
+                vals['name'] = self.env['ir.sequence'].next_by_code('rental.order') or 'Nouveau'
+        return super(RentalOrder, self).create(vals_list)
 
     @api.depends('start_date', 'end_date')
     def _compute_duration(self):

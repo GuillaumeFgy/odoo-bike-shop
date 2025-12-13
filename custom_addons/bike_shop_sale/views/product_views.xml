@@ -71,16 +71,16 @@
         <field name="name">product.template.tree.bike</field>
         <field name="model">product.template</field>
         <field name="arch" type="xml">
-            <tree string="Vélos">
+            <list string="Vélos">
                 <field name="name"/>
                 <field name="bike_category_id"/>
                 <field name="bike_brand"/>
                 <field name="bike_model"/>
                 <field name="bike_condition"/>
-                <field name="list_price" />
+                <field name="list_price"/>
                 <field name="qty_available"/>
                 <field name="is_electric" widget="boolean"/>
-            </tree>
+            </list>
         </field>
     </record>
 
@@ -93,7 +93,6 @@
         <field name="context">{
             'default_bike_shop_type': 'bike',
             'default_type': 'product',
-            'default_detailed_type': 'product',
         }</field>
     </record>
 
@@ -106,7 +105,6 @@
         <field name="context">{
             'default_bike_shop_type': 'accessory',
             'default_type': 'product',
-            'default_detailed_type': 'product',
         }</field>
     </record>
 
@@ -119,7 +117,6 @@
         <field name="context">{
             'default_bike_shop_type': 'part',
             'default_type': 'product',
-            'default_detailed_type': 'product',
         }</field>
     </record>
 </odoo>

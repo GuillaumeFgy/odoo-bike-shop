@@ -15,14 +15,6 @@
         * La gestion du stock
         * La facturation
         * Le reporting des ventes
-
-        Fonctionnalités :
-        -----------------
-        - Catalogue produits étendu avec caractéristiques spécifiques aux vélos
-        - Gestion des commandes clients
-        - Suivi du stock en temps réel
-        - Reporting des ventes par catégorie et par produit
-        - Historique client
     """,
     'author': 'Bike Shop Team',
     'website': 'https://github.com/MattLambot/odoo-bike-shop',
@@ -32,22 +24,13 @@
         'stock',
         'product',
         'account',
-        'bike_shop_rental',  # Dépend du module de location pour partager les catégories
+        'bike_shop_rental',
     ],
     'data': [
-        # Security
         'security/ir.model.access.csv',
-
-        # Views
         'views/product_views.xml',
         'views/sale_order_views.xml',
         'views/menu_views.xml',
-
-        # Reports
-        'reports/sale_report_templates.xml',
-    ],
-    'demo': [
-        'data/demo_data.xml',
     ],
     'installable': True,
     'application': False,
