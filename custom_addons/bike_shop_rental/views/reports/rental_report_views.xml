@@ -49,7 +49,7 @@
     <record id="action_rental_report" model="ir.actions.act_window">
         <field name="name">Analyse des Locations</field>
         <field name="res_model">rental.report</field>
-        <field name="view_mode">graph,pivot,tree</field>
+        <field name="view_mode">graph,pivot,list</field>
         <field name="context">{}</field>
     </record>
 
@@ -85,7 +85,7 @@
     <record id="action_bike_occupancy_report" model="ir.actions.act_window">
         <field name="name">Taux d'Occupation des Vélos</field>
         <field name="res_model">bike.occupancy.report</field>
-        <field name="view_mode">tree,graph</field>
+        <field name="view_mode">list,graph</field>
     </record>
 
     <!-- Menus pour les rapports -->

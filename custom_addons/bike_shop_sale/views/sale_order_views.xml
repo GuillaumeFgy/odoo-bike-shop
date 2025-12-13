@@ -22,7 +22,7 @@
     <record id="action_sale_order_bike_shop" model="ir.actions.act_window">
         <field name="name">Commandes de Vente</field>
         <field name="res_model">sale.order</field>
-        <field name="view_mode">tree,form,kanban</field>
+        <field name="view_mode">list,form,kanban</field>
         <field name="domain">[]</field>
         <field name="context">{}</field>
     </record>

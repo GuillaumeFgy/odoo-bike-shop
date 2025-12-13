@@ -212,6 +212,6 @@
     <record id="action_bike_category" model="ir.actions.act_window">
         <field name="name">Catégories de Vélos</field>
         <field name="res_model">bike.category</field>
-        <field name="view_mode">tree,form</field>
+        <field name="view_mode">list,form</field>
     </record>
 </odoo>
