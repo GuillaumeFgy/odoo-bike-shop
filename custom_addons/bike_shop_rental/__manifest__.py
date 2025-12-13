@@ -24,7 +24,7 @@
         - Reporting de taux d'occupation
     """,
     'author': 'Bike Shop Team',
-    'website': 'https://github.com/MattLambot/odoo-bike-shop',
+    'website': 'https://github.com/GuillaumeFgy/odoo-bike-shop',
     'depends': [
         'base',
         'sale_management',

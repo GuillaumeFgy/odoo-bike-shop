@@ -17,7 +17,7 @@
         * Le reporting des ventes
     """,
     'author': 'Bike Shop Team',
-    'website': 'https://github.com/MattLambot/odoo-bike-shop',
+    'website': 'https://github.com/GuillaumeFgy/odoo-bike-shop',
     'depends': [
         'base',
         'sale_management',
