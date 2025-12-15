@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Extension de la vue form du produit -->
+    <!-- Extension SIMPLIFIÉE de la vue form du produit -->
     <record id="view_product_template_form_inherit" model="ir.ui.view">
         <field name="name">product.template.form.inherit.bike.shop</field>
         <field name="model">product.template</field>
@@ -8,58 +8,101 @@
         <field name="arch" type="xml">
             <!-- Ajout du type de produit bike shop -->
             <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="bike_shop_type"/>
+                <field name="bike_shop_type" 
+                       string="Type de produit"
+                       widget="radio"
+                       options="{'horizontal': true}"/>
             </xpath>
 
             <!-- Ajout d'un onglet pour les vélos -->
             <xpath expr="//notebook" position="inside">
-                <page string="Caractéristiques Vélo" name="bike_specs"
+                <page string="CARACTÉRISTIQUES VÉLO" name="bike_specs"
                       invisible="bike_shop_type != 'bike'">
-                    <group>
-                        <group name="bike_general">
-                            <field name="bike_category_id"/>
-                            <field name="bike_brand"/>
-                            <field name="bike_model"/>
-                            <field name="bike_year"/>
-                            <field name="bike_condition"/>
+                    <group string="Informations Générales">
+                        <group>
+                            <field name="bike_category_id" 
+                                   string="Catégorie"
+                                   placeholder="Ville, Route, VTT..."/>
+                            <field name="bike_brand" 
+                                   string="Marque"
+                                   placeholder="TREK, GIANT, SPECIALIZED..."/>
+                            <field name="bike_model" 
+                                   string="Modèle"
+                                   placeholder="City Commuter, Mountain X5..."/>
+                            <field name="bike_year" 
+                                   string="Année"/>
                         </group>
-                        <group name="bike_details">
-                            <field name="bike_frame_size"/>
-                            <field name="bike_color"/>
-                            <field name="bike_weight"/>
+                        <group>
+                            <field name="bike_condition" 
+                                   string="État"
+                                   widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="bike_frame_size" 
+                                   string="Taille du cadre"/>
+                            <field name="bike_color" 
+                                   string="Couleur"
+                                   placeholder="Noir, Bleu, Rouge..."/>
+                            <field name="bike_weight" 
+                                   string="Poids (kg)"
+                                   placeholder="Ex: 13.5"/>
                         </group>
                     </group>
-                    <group string="Vélo Électrique" invisible="not is_electric">
+                    
+                    <group string="Vélo Électrique (optionnel)">
                         <group>
-                            <field name="is_electric"/>
-                            <field name="battery_capacity" invisible="not is_electric"/>
+                            <field name="is_electric" string="Vélo électrique"/>
+                            <field name="battery_capacity" 
+                                   string="Capacité batterie (Wh)"
+                                   invisible="not is_electric"
+                                   placeholder="Ex: 500"/>
                         </group>
                         <group>
-                            <field name="max_speed" invisible="not is_electric"/>
-                            <field name="range_km" invisible="not is_electric"/>
+                            <field name="max_speed" 
+                                   string="Vitesse max (km/h)"
+                                   invisible="not is_electric"
+                                   placeholder="Ex: 25"/>
+                            <field name="range_km" 
+                                   string="Autonomie (km)"
+                                   invisible="not is_electric"
+                                   placeholder="Ex: 80"/>
+                        </group>
+                    </group>
+
+                    <group string="Garantie">
+                        <group>
+                            <field name="warranty_months" 
+                                   string="Garantie (mois)"
+                                   placeholder="Ex: 24"/>
+                            <field name="warranty_info" 
+                                   string="Détails garantie"
+                                   placeholder="Informations complémentaires sur la garantie..."/>
                         </group>
                     </group>
                 </page>
 
-                <page string="Accessoire" name="accessory_specs"
+                <page string="CARACTÉRISTIQUES ACCESSOIRE" name="accessory_specs"
                       invisible="bike_shop_type != 'accessory'">
                     <group>
-                        <field name="accessory_type"/>
+                        <field name="accessory_type" 
+                               string="Type d'accessoire"
+                               placeholder="Casque, Antivol, Éclairage..."/>
+                    </group>
+                    <group string="Garantie">
+                        <field name="warranty_months" 
+                               string="Garantie (mois)"
+                               placeholder="Ex: 12"/>
+                        <field name="warranty_info" 
+                               string="Détails garantie"
+                               placeholder="Informations sur la garantie..."/>
                     </group>
                 </page>
 
-                <page string="Pièce Détachée" name="part_specs"
+                <page string="CARACTÉRISTIQUES PIÈCE" name="part_specs"
                       invisible="bike_shop_type != 'part'">
                     <group>
-                        <field name="part_type"/>
-                    </group>
-                </page>
-
-                <page string="Garantie" name="warranty"
-                      invisible="bike_shop_type not in ['bike', 'accessory']">
-                    <group>
-                        <field name="warranty_months"/>
-                        <field name="warranty_info" placeholder="Informations sur la garantie..."/>
+                        <field name="part_type" 
+                               string="Type de pièce"
+                               placeholder="Chambre à air, Chaîne, Frein..."/>
                     </group>
                 </page>
             </xpath>

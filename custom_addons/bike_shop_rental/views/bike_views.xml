@@ -23,7 +23,7 @@
         </field>
     </record>
 
-    <!-- Vue Form pour les vélos -->
+    <!-- Vue Form SIMPLIFIÉE pour les vélos -->
     <record id="view_bike_form" model="ir.ui.view">
         <field name="name">bike.bike.form</field>
         <field name="model">bike.bike</field>
@@ -33,69 +33,113 @@
                     <button name="action_set_available" type="object"
                             string="Marquer Disponible"
                             class="oe_highlight"
-                            invisible="state == 'available'"/>
+                            invisible="state == 'available'"
+                            help="Rendre le vélo disponible à la location"/>
                     <button name="action_set_maintenance" type="object"
                             string="Envoyer en Maintenance"
-                            invisible="state == 'maintenance'"/>
+                            invisible="state == 'maintenance'"
+                            help="Mettre le vélo en maintenance"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="available,rented,maintenance"/>
                 </header>
                 <sheet>
                     <field name="image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
+                        <label for="name" string="Nom du Vélo"/>
                         <h1>
-                            <field name="name" placeholder="Nom du vélo"/>
+                            <field name="name" placeholder="Ex: TREK City 2023" required="1"/>
                         </h1>
                     </div>
-                    <group>
-                        <group name="info_principale">
-                            <field name="category_id"/>
-                            <field name="brand"/>
-                            <field name="model"/>
-                            <field name="year"/>
-                            <field name="serial_number"/>
+
+                    <!-- SECTION 1 : INFORMATIONS PRINCIPALES -->
+                    <group string="INFORMATIONS PRINCIPALES">
+                        <group>
+                            <field name="category_id" 
+                                   string="Catégorie"
+                                   placeholder="Ville, Route, VTT..."
+                                   required="1"/>
+                            <field name="brand" 
+                                   string="Marque"
+                                   placeholder="TREK, GIANT, SPECIALIZED..."/>
+                            <field name="model" 
+                                   string="Modèle"
+                                   placeholder="City Commuter, Mountain X5..."/>
+                            <field name="year" 
+                                   string="Année"/>
                         </group>
-                        <group name="caracteristiques">
-                            <field name="frame_size"/>
-                            <field name="color"/>
-                            <field name="condition"/>
-                            <field name="product_id"/>
+                        <group>
+                            <field name="frame_size" 
+                                   string="Taille du cadre"/>
+                            <field name="color" 
+                                   string="Couleur"
+                                   placeholder="Noir, Bleu, Rouge..."/>
+                            <field name="condition" 
+                                   string="État"
+                                   widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="serial_number" 
+                                   string="Numéro de série"
+                                   placeholder="Ex: ABC123456"/>
                         </group>
                     </group>
-                    <notebook>
-                        <page string="Tarification" name="pricing">
-                            <group>
-                                <group>
-                                    <field name="hourly_rate"/>
-                                    <field name="daily_rate"/>
-                                </group>
-                                <group>
-                                    <field name="weekly_rate"/>
-                                    <field name="monthly_rate"/>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="Statistiques" name="stats">
-                            <group>
-                                <field name="rental_count"/>
-                                <field name="total_rental_days"/>
-                                <field name="last_rental_date"/>
-                            </group>
+
+                    <!-- SECTION 2 : TARIFICATION -->
+                    <group string="TARIFICATION">
+                        <group>
+                            <field name="hourly_rate" 
+                                   string="Tarif horaire"
+                                   placeholder="Ex: 5.00"/>
+                            <field name="daily_rate" 
+                                   string="Tarif journalier"
+                                   placeholder="Ex: 25.00"/>
+                        </group>
+                        <group>
+                            <field name="weekly_rate" 
+                                   string="Tarif hebdomadaire"
+                                   placeholder="Ex: 100.00"/>
+                            <field name="monthly_rate" 
+                                   string="Tarif mensuel"
+                                   placeholder="Ex: 300.00"/>
+                        </group>
+                    </group>
+
+                    <!-- SECTION 3 : STATISTIQUES -->
+                    <group string="STATISTIQUES" invisible="rental_count == 0">
+                        <group>
+                            <field name="rental_count" string="Nombre de locations" readonly="1"/>
+                            <field name="total_rental_days" string="Jours loués au total" readonly="1"/>
+                            <field name="last_rental_date" string="Dernière location" readonly="1"/>
+                        </group>
+                        <group>
                             <button name="action_view_rentals" type="object"
-                                    string="Voir les Locations"
+                                    string="Voir l'Historique des Locations"
                                     class="oe_highlight"
-                                    invisible="rental_count == 0"/>
-                        </page>
+                                    icon="fa-history"/>
+                        </group>
+                    </group>
+
+                    <!-- ONGLETS SECONDAIRES -->
+                    <notebook>
                         <page string="Description" name="description">
-                            <field name="description" placeholder="Description du vélo..."/>
+                            <field name="description" 
+                                   placeholder="Description détaillée du vélo (équipements, caractéristiques...)"/>
                         </page>
                         <page string="Notes Internes" name="notes">
-                            <field name="notes" placeholder="Notes internes..."/>
+                            <field name="notes" 
+                                   placeholder="Notes internes (entretien, historique, remarques...)"/>
+                        </page>
+                        <page string="Lien Produit" name="product">
+                            <group>
+                                <field name="product_id" 
+                                       string="Produit lié"
+                                       help="Produit dans le catalogue de vente"/>
+                            </group>
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
+                <!-- CHATTER masqué par défaut -->
+                <div class="oe_chatter" invisible="rental_count == 0">
+                    <field name="message_follower_ids" groups="base.group_user"/>
                     <field name="message_ids"/>
                 </div>
             </form>
@@ -115,7 +159,7 @@
                 <field name="daily_rate"/>
                 <field name="image"/>
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div class="oe_kanban_global_click">
                             <div class="o_kanban_image">
                                 <img t-att-src="kanban_image('bike.bike', 'image', record.id.raw_value)"

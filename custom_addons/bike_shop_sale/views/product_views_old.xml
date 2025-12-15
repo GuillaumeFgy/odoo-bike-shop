@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extension de la vue form du produit -->
+    <record id="view_product_template_form_inherit" model="ir.ui.view">
+        <field name="name">product.template.form.inherit.bike.shop</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Ajout du type de produit bike shop -->
+            <xpath expr="//field[@name='categ_id']" position="after">
+                <field name="bike_shop_type"/>
+            </xpath>
+
+            <!-- Ajout d'un onglet pour les vélos -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Caractéristiques Vélo" name="bike_specs"
+                      invisible="bike_shop_type != 'bike'">
+                    <group>
+                        <group name="bike_general">
+                            <field name="bike_category_id"/>
+                            <field name="bike_brand"/>
+                            <field name="bike_model"/>
+                            <field name="bike_year"/>
+                            <field name="bike_condition"/>
+                        </group>
+                        <group name="bike_details">
+                            <field name="bike_frame_size"/>
+                            <field name="bike_color"/>
+                            <field name="bike_weight"/>
+                        </group>
+                    </group>
+                    <group string="Vélo Électrique" invisible="not is_electric">
+                        <group>
+                            <field name="is_electric"/>
+                            <field name="battery_capacity" invisible="not is_electric"/>
+                        </group>
+                        <group>
+                            <field name="max_speed" invisible="not is_electric"/>
+                            <field name="range_km" invisible="not is_electric"/>
+                        </group>
+                    </group>
+                </page>
+
+                <page string="Accessoire" name="accessory_specs"
+                      invisible="bike_shop_type != 'accessory'">
+                    <group>
+                        <field name="accessory_type"/>
+                    </group>
+                </page>
+
+                <page string="Pièce Détachée" name="part_specs"
+                      invisible="bike_shop_type != 'part'">
+                    <group>
+                        <field name="part_type"/>
+                    </group>
+                </page>
+
+                <page string="Garantie" name="warranty"
+                      invisible="bike_shop_type not in ['bike', 'accessory']">
+                    <group>
+                        <field name="warranty_months"/>
+                        <field name="warranty_info" placeholder="Informations sur la garantie..."/>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vue tree pour les produits vélos -->
+    <record id="view_product_template_tree_bike" model="ir.ui.view">
+        <field name="name">product.template.tree.bike</field>
+        <field name="model">product.template</field>
+        <field name="arch" type="xml">
+            <list string="Vélos">
+                <field name="name"/>
+                <field name="bike_category_id"/>
+                <field name="bike_brand"/>
+                <field name="bike_model"/>
+                <field name="bike_condition"/>
+                <field name="list_price"/>
+                <field name="qty_available"/>
+                <field name="is_electric" widget="boolean"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action pour les vélos à vendre -->
+    <record id="action_product_bike" model="ir.actions.act_window">
+        <field name="name">Vélos à Vendre</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('bike_shop_type', '=', 'bike')]</field>
+        <field name="context">{
+            'default_bike_shop_type': 'bike',
+            'default_type': 'product',
+        }</field>
+    </record>
+
+    <!-- Action pour les accessoires -->
+    <record id="action_product_accessory" model="ir.actions.act_window">
+        <field name="name">Accessoires</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('bike_shop_type', '=', 'accessory')]</field>
+        <field name="context">{
+            'default_bike_shop_type': 'accessory',
+            'default_type': 'product',
+        }</field>
+    </record>
+
+    <!-- Action pour les pièces détachées -->
+    <record id="action_product_part" model="ir.actions.act_window">
+        <field name="name">Pièces Détachées</field>
+        <field name="res_model">product.template</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('bike_shop_type', '=', 'part')]</field>
+        <field name="context">{
+            'default_bike_shop_type': 'part',
+            'default_type': 'product',
+        }</field>
+    </record>
+</odoo>

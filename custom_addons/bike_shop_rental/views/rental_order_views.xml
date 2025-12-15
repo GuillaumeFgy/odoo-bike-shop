@@ -31,7 +31,7 @@
         </field>
     </record>
 
-    <!-- Vue Form pour les contrats de location -->
+    <!-- Vue Form SIMPLIFIÉE pour les contrats de location -->
     <record id="view_rental_order_form" model="ir.ui.view">
         <field name="name">rental.order.form</field>
         <field name="model">rental.order</field>
@@ -39,19 +39,22 @@
             <form string="Contrat de Location">
                 <header>
                     <button name="action_confirm" type="object"
-                            string="Confirmer"
+                            string="Confirmer le Contrat"
                             class="oe_highlight"
-                            invisible="state != 'draft'"/>
+                            invisible="state != 'draft'"
+                            help="Valider le contrat de location"/>
                     <button name="action_start_rental" type="object"
-                            string="Démarrer Location"
+                            string="Démarrer la Location"
                             class="oe_highlight"
-                            invisible="state != 'confirmed'"/>
+                            invisible="state != 'confirmed'"
+                            help="Le client récupère le vélo"/>
                     <button name="action_end_rental" type="object"
-                            string="Terminer Location"
+                            string="Terminer la Location"
                             class="oe_highlight"
-                            invisible="state != 'ongoing'"/>
+                            invisible="state != 'ongoing'"
+                            help="Le client rend le vélo"/>
                     <button name="action_create_invoice" type="object"
-                            string="Créer Facture"
+                            string="Créer la Facture"
                             class="oe_highlight"
                             invisible="state != 'done' or invoice_id"/>
                     <button name="action_cancel" type="object"
@@ -62,60 +65,120 @@
                 </header>
                 <sheet>
                     <div class="oe_title">
+                        <label for="name" string="Numéro de Contrat"/>
                         <h1>
-                            <field name="name" readonly="1"/>
+                            <field name="name" readonly="1" placeholder="Sera généré automatiquement..."/>
                         </h1>
                     </div>
-                    <group>
-                        <group name="client_info" string="Informations Client">
-                            <field name="partner_id"/>
-                            <field name="partner_phone"/>
-                            <field name="partner_email"/>
-                        </group>
-                        <group name="bike_info" string="Informations Vélo">
-                            <field name="bike_id"/>
-                            <field name="bike_category"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group name="period" string="Période de Location">
-                            <field name="start_date"/>
-                            <field name="end_date"/>
-                            <field name="actual_return_date" invisible="state != 'done'"/>
-                        </group>
-                        <group name="duration" string="Durée">
-                            <field name="duration_hours"/>
-                            <field name="duration_days"/>
+
+                    <!-- SECTION 1 : CLIENT -->
+                    <group string="INFORMATIONS CLIENT">
+                        <group>
+                            <field name="partner_id" 
+                                   string="Client"
+                                   placeholder="Sélectionnez un client..."
+                                   required="1"
+                                   options="{'no_create': False, 'no_open': False}"/>
+                            <field name="partner_phone" string="Téléphone"/>
+                            <field name="partner_email" string="Email"/>
                         </group>
                     </group>
-                    <group>
-                        <group name="pricing" string="Tarification">
-                            <field name="rental_type"/>
-                            <field name="unit_price"/>
-                            <field name="quantity"/>
-                            <field name="subtotal"/>
-                            <field name="deposit_amount"/>
+
+                    <!-- SECTION 2 : VÉLO -->
+                    <group string="VÉLO À LOUER">
+                        <group>
+                            <field name="bike_id" 
+                                   string="Vélo"
+                                   placeholder="Choisissez un vélo disponible..."
+                                   required="1"
+                                   domain="[('state', '=', 'available')]"
+                                   context="{'default_state': 'available'}"/>
+                            <field name="bike_category" string="Catégorie" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- SECTION 3 : PÉRIODE -->
+                    <group string="PÉRIODE DE LOCATION">
+                        <group>
+                            <field name="start_date" 
+                                   string="Date et heure de début"
+                                   required="1"/>
+                            <field name="end_date" 
+                                   string="Date et heure de fin"
+                                   required="1"/>
+                            <field name="actual_return_date" 
+                                   string="Retour effectif"
+                                   invisible="state != 'done'"
+                                   readonly="1"/>
+                        </group>
+                        <group string="Durée Calculée">
+                            <field name="duration_days" 
+                                   string="Jours"
+                                   readonly="1"/>
+                            <field name="duration_hours" 
+                                   string="Heures totales"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- SECTION 4 : TARIFICATION -->
+                    <group string="TARIFICATION">
+                        <group>
+                            <field name="rental_type" 
+                                   string="Type de tarif"
+                                   required="1"
+                                   widget="radio"
+                                   options="{'horizontal': true}"/>
+                            <field name="unit_price" 
+                                   string="Prix unitaire"
+                                   readonly="1"/>
+                            <field name="quantity" 
+                                   string="Quantité"
+                                   readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="subtotal" 
+                                   string="Sous-total"
+                                   readonly="1"/>
+                            <field name="deposit_amount" 
+                                   string="Caution"
+                                   placeholder="Ex: 150.00"/>
                             <field name="total_amount"
-                                   class="oe_subtotal_footer_separator"/>
-                        </group>
-                        <group name="invoicing" string="Facturation">
-                            <field name="invoice_status"/>
-                            <field name="invoice_id" invisible="not invoice_id"/>
+                                   string="TOTAL À PAYER"
+                                   readonly="1"
+                                   class="oe_subtotal_footer_separator"
+                                   widget="monetary"/>
                         </group>
                     </group>
+
+                    <!-- SECTION 5 : FACTURATION -->
+                    <group string="FACTURATION" invisible="state == 'draft'">
+                        <group>
+                            <field name="invoice_status" string="État facturation"/>
+                            <field name="invoice_id" 
+                                   string="Facture"
+                                   invisible="not invoice_id"
+                                   readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- NOTES -->
                     <notebook>
                         <page string="Notes" name="notes">
-                            <field name="notes" placeholder="Notes concernant la location..."/>
+                            <field name="notes" 
+                                   placeholder="Notes concernant la location (demandes spéciales, remarques...)"/>
                         </page>
-                        <page string="Rapport de Dommages" name="damage_report"
+                        <page string="Rapport de Dommages" 
+                              name="damage_report"
                               invisible="state not in ['done', 'cancelled']">
                             <field name="damage_report"
-                                   placeholder="Rapport de dommages ou d'incidents..."/>
+                                   placeholder="Rapport de dommages ou d'incidents constatés au retour du vélo..."/>
                         </page>
                     </notebook>
                 </sheet>
-                <div class="oe_chatter">
-                    <field name="message_follower_ids"/>
+                <!-- CHATTER masqué par défaut -->
+                <div class="oe_chatter" invisible="state == 'draft'">
+                    <field name="message_follower_ids" groups="base.group_user"/>
                     <field name="message_ids"/>
                 </div>
             </form>
@@ -134,7 +197,7 @@
                 <field name="total_amount"/>
                 <field name="state"/>
                 <templates>
-                    <t t-name="kanban-box">
+                    <t t-name="card">
                         <div class="oe_kanban_global_click">
                             <div class="oe_kanban_content">
                                 <div class="o_kanban_record_top">
