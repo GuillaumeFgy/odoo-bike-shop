@@ -162,8 +162,7 @@
                     <t t-name="card">
                         <div class="oe_kanban_global_click">
                             <div class="o_kanban_image">
-                                <img t-att-src="kanban_image('bike.bike', 'image', record.id.raw_value)"
-                                     alt="Bike" class="o_image_64_contain"/>
+                                <field name="image" widget="image" class="o_image_64_contain"/>
                             </div>
                             <div class="oe_kanban_details">
                                 <strong class="o_kanban_record_title">
