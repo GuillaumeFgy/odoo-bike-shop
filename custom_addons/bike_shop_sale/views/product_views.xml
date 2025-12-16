@@ -135,7 +135,7 @@
         <field name="domain">[('bike_shop_type', '=', 'bike')]</field>
         <field name="context">{
             'default_bike_shop_type': 'bike',
-            'default_type': 'product',
+            'default_detailed_type': 'product',
         }</field>
     </record>
 
@@ -147,7 +147,7 @@
         <field name="domain">[('bike_shop_type', '=', 'accessory')]</field>
         <field name="context">{
             'default_bike_shop_type': 'accessory',
-            'default_type': 'product',
+            'default_detailed_type': 'product',
         }</field>
     </record>
 
@@ -159,7 +159,7 @@
         <field name="domain">[('bike_shop_type', '=', 'part')]</field>
         <field name="context">{
             'default_bike_shop_type': 'part',
-            'default_type': 'product',
+            'default_detailed_type': 'product',
         }</field>
     </record>
 </odoo>

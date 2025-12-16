@@ -32,6 +32,10 @@
         'views/sale_order_views.xml',
         'views/menu_views.xml',
     ],
+
+    'demo': [ 
+    'data/demo_data.xml',
+],  
     'installable': True,
     'application': False,
     'auto_install': False,
