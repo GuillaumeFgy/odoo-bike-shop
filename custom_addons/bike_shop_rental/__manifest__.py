@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': 'Bike Shop - Rental Management',
-    'version': '19.0.1.0.0',
+    'version': '19.0.1.1.0',
     'category': 'Sales/Rental',
     'summary': 'Gestion de location de vélos pour le magasin',
     'description': """
@@ -22,6 +22,7 @@
         - Calcul automatique des tarifs
         - Suivi de la disponibilité en temps réel
         - Reporting de taux d'occupation
+        - Attribution automatique d'images selon le modèle/catégorie
     """,
     'author': 'Bike Shop Team',
     'website': 'https://github.com/GuillaumeFgy/odoo-bike-shop',
@@ -39,6 +40,7 @@
         # Data
         'data/bike_category_data.xml',
         'data/product_data.xml',
+        'data/bike_actions.xml',
 
         # Views
         'views/bike_views.xml',

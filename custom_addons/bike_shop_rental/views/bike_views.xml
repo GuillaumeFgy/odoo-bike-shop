@@ -39,6 +39,10 @@
                             string="Envoyer en Maintenance"
                             invisible="state == 'maintenance'"
                             help="Mettre le vélo en maintenance"/>
+                    <button name="action_assign_default_image" type="object"
+                            string="Assigner Image Auto"
+                            icon="fa-picture-o"
+                            help="Assigner automatiquement une image basée sur le modèle/catégorie"/>
                     <field name="state" widget="statusbar"
                            statusbar_visible="available,rented,maintenance"/>
                 </header>

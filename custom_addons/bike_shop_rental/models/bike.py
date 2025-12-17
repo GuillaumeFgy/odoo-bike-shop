@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, exceptions
+import base64
+import os
 
 
 class Bike(models.Model):
@@ -115,6 +117,124 @@ class Bike(models.Model):
                 if not bike.monthly_rate:
                     bike.monthly_rate = bike.category_id.monthly_rate
 
+    def _get_default_image_for_model(self, model_name, category_name):
+        """
+        Retourne une image par défaut basée sur le modèle ou la catégorie du vélo.
+
+        Args:
+            model_name: Nom du modèle (ex: "Mountain X5", "City Commuter")
+            category_name: Nom de la catégorie (ex: "VTT", "Vélo de Ville")
+
+        Returns:
+            Binary image data or False
+        """
+        # Mapping des mots-clés vers les noms d'images
+        # L'ordre est important : les plus spécifiques en premier (e-bike avant urban)
+        image_mapping = [
+            # Électrique (priorité haute - à vérifier en premier)
+            ('e-bike', 'electric_bike.jpg'),
+            ('ebike', 'electric_bike.jpg'),
+            ('electric', 'electric_bike.jpg'),
+            ('électrique', 'electric_bike.jpg'),
+
+            # Mountain
+            ('mountain', 'mountain_bike.jpg'),
+            ('mtb', 'mountain_bike.jpg'),
+            ('vtt', 'mountain_bike.jpg'),
+
+            # Road
+            ('road', 'road_bike.jpg'),
+            ('route', 'road_bike.jpg'),
+
+            # Kids
+            ('kids', 'kids_bike.jpg'),
+            ('enfant', 'kids_bike.jpg'),
+            ('junior', 'kids_bike.jpg'),
+
+            # City (moins spécifique - à vérifier en dernier)
+            ('city', 'city_bike.jpg'),
+            ('ville', 'city_bike.jpg'),
+            ('commuter', 'city_bike.jpg'),
+            ('urbain', 'city_bike.jpg'),
+            ('urban', 'city_bike.jpg'),
+        ]
+
+        # Cherche d'abord dans le nom du modèle
+        model_lower = (model_name or '').lower()
+        for keyword, image_file in image_mapping:
+            if keyword in model_lower:
+                return self._load_default_image(image_file)
+
+        # Sinon cherche dans la catégorie
+        category_lower = (category_name or '').lower()
+        for keyword, image_file in image_mapping:
+            if keyword in category_lower:
+                return self._load_default_image(image_file)
+
+        # Image par défaut si rien ne correspond
+        return self._load_default_image('default_bike.jpg')
+
+    def _load_default_image(self, image_filename):
+        """
+        Charge une image depuis le dossier static/img du module.
+
+        Args:
+            image_filename: Nom du fichier image
+
+        Returns:
+            Binary image data encoded in base64 or False
+        """
+        try:
+            # Chemin vers le dossier static/img du module
+            module_path = os.path.dirname(os.path.dirname(__file__))
+            image_path = os.path.join(module_path, 'static', 'img', image_filename)
+
+            if os.path.exists(image_path):
+                with open(image_path, 'rb') as image_file:
+                    return base64.b64encode(image_file.read())
+        except Exception:
+            pass
+
+        return False
+
+    @api.onchange('model', 'category_id')
+    def _onchange_model_assign_image(self):
+        """
+        Assigne automatiquement une image quand le modèle ou la catégorie change.
+        Ne remplace pas l'image si elle a été manuellement définie.
+        """
+        # Ne pas remplacer une image existante (sauf si c'est une création)
+        if self.image and self._origin.id:
+            return
+
+        if self.model or self.category_id:
+            category_name = self.category_id.name if self.category_id else ''
+            default_image = self._get_default_image_for_model(self.model, category_name)
+            if default_image:
+                self.image = default_image
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        """
+        Override create pour assigner automatiquement une image si aucune n'est fournie.
+        """
+        for vals in vals_list:
+            # Si aucune image n'est fournie, en assigner une automatiquement
+            if not vals.get('image'):
+                model_name = vals.get('model', '')
+                category_id = vals.get('category_id')
+                category_name = ''
+
+                if category_id:
+                    category = self.env['bike.category'].browse(category_id)
+                    category_name = category.name if category else ''
+
+                default_image = self._get_default_image_for_model(model_name, category_name)
+                if default_image:
+                    vals['image'] = default_image
+
+        return super(Bike, self).create(vals_list)
+
     def _compute_rental_count(self):
         """Compte le nombre de locations pour ce vélo"""
         for bike in self:
@@ -159,6 +279,18 @@ class Bike(models.Model):
             'domain': [('bike_id', '=', self.id)],
             'context': {'default_bike_id': self.id}
         }
+
+    def action_assign_default_image(self):
+        """
+        Action pour assigner manuellement l'image par défaut.
+        Utile pour mettre à jour les vélos existants.
+        """
+        for bike in self:
+            category_name = bike.category_id.name if bike.category_id else ''
+            default_image = bike._get_default_image_for_model(bike.model, category_name)
+            if default_image:
+                bike.image = default_image
+        return True
 
     _sql_constraints = [
         ('serial_number_unique', 'UNIQUE(serial_number)',
