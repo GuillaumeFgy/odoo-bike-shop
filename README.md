@@ -1,31 +1,6 @@
 Test# 🚴 Bike Shop - Système de Gestion Odoo
 
-[![Odoo Version](https://img.shields.io/badge/Odoo-19.0-blue)](https://www.odoo.com/)
-[![License](https://img.shields.io/badge/License-LGPL--3-green)](https://www.gnu.org/licenses/lgpl-3.0.html)
-[![Python](https://img.shields.io/badge/Python-3.10+-yellow)](https://www.python.org/)
-
 Système complet de gestion pour un magasin de vélos basé sur Odoo 19.0 Community Edition.
-
-## 📋 Table des Matières
-
-- [Contexte du Projet](#contexte-du-projet)
-- [Fonctionnalités](#fonctionnalités)
-- [Architecture](#architecture)
-- [Prérequis](#prérequis)
-- [Installation](#installation)
-  - [Option 1: Installation avec Docker (Recommandé)](#option-1-installation-avec-docker-recommandé)
-  - [Option 2: Installation Manuelle](#option-2-installation-manuelle)
-- [Configuration](#configuration)
-- [Utilisation](#utilisation)
-- [Démonstration](#démonstration)
-- [Rapports et Analyses](#rapports-et-analyses)
-- [Structure du Projet](#structure-du-projet)
-- [Développement](#développement)
-- [Déploiement](#déploiement)
-- [FAQ](#faq)
-- [Support](#support)
-- [Auteurs](#auteurs)
-- [Licence](#licence)
 
 ## 🎯 Contexte du Projet
 
@@ -43,76 +18,6 @@ Ce projet a été développé dans le cadre d'un examen académique pour démont
 - Démonstration locale (pas d'hébergement cloud requis)
 - Modules personnalisés suivant les conventions Odoo
 
-## ✨ Fonctionnalités
-
-### 🏪 Vente
-- ✅ Catalogue de produits (vélos, accessoires, pièces détachées)
-- ✅ Gestion des commandes clients
-- ✅ Facturation automatique
-- ✅ Gestion du stock (entrées/sorties)
-- ✅ Historique des ventes par client
-- ✅ Reporting des ventes par produit et catégorie
-
-### 🚲 Location
-- ✅ Gestion des vélos disponibles à la location
-- ✅ Contrats de location (horaire, journalier, hebdomadaire, mensuel)
-- ✅ Tarification flexible et automatique
-- ✅ Suivi de la disponibilité en temps réel
-- ✅ Calendrier des locations
-- ✅ Gestion des cautions
-- ✅ Rapport de taux d'occupation
-
-### 👥 Clients
-- ✅ Fiches clients complètes
-- ✅ Historique des achats
-- ✅ Historique des locations
-- ✅ Coordonnées et informations de contact
-
-### 📊 Reporting
-- ✅ Analyse des ventes (pivot, graphiques)
-- ✅ Taux d'occupation des vélos
-- ✅ Revenus par catégorie
-- ✅ Statistiques de location
-- ✅ Export PDF des contrats
-
-## 🏗️ Architecture
-
-### Modules Personnalisés
-
-Le projet comprend **2 modules personnalisés** :
-
-#### 1. **bike_shop_rental** - Module de Location
-Module principal pour la gestion des locations de vélos.
-
-**Modèles:**
-- `bike.category` - Catégories de vélos (VTT, Route, Ville, Électrique, etc.)
-- `bike.bike` - Vélos individuels avec caractéristiques et état
-- `rental.order` - Contrats de location
-- `rental.report` - Vues d'analyse des locations
-- `bike.occupancy.report` - Rapport de taux d'occupation
-
-**Fonctionnalités clés:**
-- Gestion complète du cycle de vie d'une location
-- Calcul automatique des tarifs selon la durée
-- Vérification de disponibilité automatique
-- Génération de contrats PDF
-- Statistiques en temps réel
-
-#### 2. **bike_shop_sale** - Module de Vente Étendu
-Extension du module de vente standard Odoo pour les vélos.
-
-**Fonctionnalités:**
-- Champs personnalisés pour les vélos (marque, modèle, taille, etc.)
-- Support des vélos électriques (batterie, autonomie, vitesse)
-- Gestion des accessoires et pièces détachées
-- Garantie personnalisée par produit
-- Intégration avec le stock
-
-### Modules Odoo Standard Utilisés
-- `sale_management` - Gestion des ventes
-- `stock` - Gestion du stock
-- `product` - Gestion des produits
-- `account` - Comptabilité et facturation
 
 ## 💻 Prérequis
 
@@ -541,88 +446,12 @@ docker cp odoo_bike_shop:/var/lib/odoo ./backup-filestore
 cp -r ~/.local/share/Odoo/filestore/bike_shop ./backup-filestore
 ```
 
-## ❓ FAQ
-
-### Odoo ne démarre pas
-
-**Problème:** `ImportError: No module named 'xxx'`
-
-**Solution:**
-```bash
-pip3 install -r odoo/requirements.txt
-```
-
-### Les modules n'apparaissent pas
-
-**Solution:**
-1. Vérifiez que `addons_path` est correct dans `odoo.conf`
-2. Redémarrez Odoo
-3. Apps > Update Apps List
-
-### Erreur de base de données
-
-**Problème:** `FATAL: password authentication failed`
-
-**Solution:**
-Vérifiez les credentials PostgreSQL dans `odoo.conf` ou `docker-compose.yml`
-
-### Le port 8069 est déjà utilisé
-
-**Solution:**
-Modifiez le port dans `docker-compose.yml`:
-```yaml
-ports:
-  - "8070:8069"
-```
-
-Puis accédez via http://localhost:8070
-
-### Comment réinitialiser les données ?
-
 **Docker:**
 ```bash
 docker-compose down -v
 docker-compose up -d
 ```
 
-**Manuel:**
-```bash
-dropdb bike_shop
-createdb bike_shop
-./odoo/odoo-bin -c odoo.conf -d bike_shop -i base --without-demo=False
+
 ```
 
-## 📞 Support
-
-- **Issues:** [GitHub Issues](https://github.com/MattLambot/odoo-bike-shop/issues)
-- **Documentation Odoo:** [odoo.com/documentation/19.0](https://www.odoo.com/documentation/19.0)
-- **Forum Odoo:** [odoo.com/forum](https://www.odoo.com/forum)
-
-## 👥 Auteurs
-
-**Bike Shop Team**
-- Projet académique - Odoo 19.0
-- 2024-2025
-
-## 📄 Licence
-
-Ce projet est sous licence **LGPL-3.0**.
-
-Les modules Odoo doivent être sous licence LGPL-3.0 ou compatibles.
-
----
-
-## 🎯 Checklist de Présentation
-
-Pour la soutenance du projet:
-
-- [ ] Démonstration de l'installation (Docker)
-- [ ] Présentation des modules personnalisés
-- [ ] Démonstration: Créer une location
-- [ ] Démonstration: Créer une vente
-- [ ] Démonstration: Consulter les rapports
-- [ ] Explication de l'architecture technique
-- [ ] Discussion sur les choix de conception
-- [ ] Questions/Réponses
-
-**Bonne présentation ! 🚴‍♂️**
