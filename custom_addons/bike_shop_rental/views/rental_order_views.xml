@@ -317,42 +317,6 @@
         </field>
     </record>
 
-    <!-- Filtres de recherche -->
-    <record id="view_rental_order_search" model="ir.ui.view">
-        <field name="name">rental.order.search</field>
-        <field name="model">rental.order</field>
-        <field name="arch" type="xml">
-            <search string="Rechercher Locations">
-                <field name="name" string="Numéro"/>
-                <field name="partner_id" string="Client"/>
-                <field name="bike_id" string="Vélo"/>
-                
-                <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"/>
-                <filter string="Confirmé" name="confirmed" domain="[('state', '=', 'confirmed')]"/>
-                <filter string="En Cours" name="ongoing" domain="[('state', '=', 'ongoing')]"/>
-                <filter string="Terminé" name="done" domain="[('state', '=', 'done')]"/>
-                
-                <separator/>
-                <filter string="À Facturer" name="to_invoice" 
-                        domain="[('invoice_status', '=', 'to_invoice')]"/>
-                <filter string="Facturé" name="invoiced" 
-                        domain="[('invoice_status', '=', 'invoiced')]"/>
-                
-                <separator/>
-                <filter string="Ce mois" name="this_month"
-                        domain="[('start_date', '&gt;=', (context_today() - relativedelta(day=1)).strftime('%Y-%m-%d')),
-                                 ('start_date', '&lt;', (context_today() + relativedelta(day=1, months=1)).strftime('%Y-%m-%d'))]"/>
-                
-                <group expand="0" string="Grouper par">
-                    <filter string="Client" name="group_partner" context="{'group_by': 'partner_id'}"/>
-                    <filter string="Vélo" name="group_bike" context="{'group_by': 'bike_id'}"/>
-                    <filter string="Type de location" name="group_rental_type" context="{'group_by': 'rental_type'}"/>
-                    <filter string="État" name="group_state" context="{'group_by': 'state'}"/>
-                    <filter string="Mois de début" name="group_month" context="{'group_by': 'start_date:month'}"/>
-                </group>
-            </search>
-        </field>
-    </record>
 
     <!-- Action pour les contrats de location -->
     <record id="action_rental_order" model="ir.actions.act_window">
