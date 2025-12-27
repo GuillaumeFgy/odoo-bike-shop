@@ -36,7 +36,7 @@
         <record id="demo_bike_1" model="bike.bike">
             <field name="name">TREK City 2023 - #001</field>
             <field name="category_id" ref="category_city"/>
-            <field name="brand">TREK</field>
+            <field name="brand_id" ref="bike_brand_trek"/>
             <field name="model">City Commuter</field>
             <field name="year">2023</field>
             <field name="frame_size">m</field>
@@ -49,7 +49,7 @@
         <record id="demo_bike_2" model="bike.bike">
             <field name="name">SPECIALIZED Mountain X5 - #002</field>
             <field name="category_id" ref="category_mountain"/>
-            <field name="brand">SPECIALIZED</field>
+            <field name="brand_id" ref="bike_brand_specialized"/>
             <field name="model">Mountain X5</field>
             <field name="year">2024</field>
             <field name="frame_size">l</field>
@@ -62,7 +62,7 @@
         <record id="demo_bike_3" model="bike.bike">
             <field name="name">GIANT Road Pro - #003</field>
             <field name="category_id" ref="category_road"/>
-            <field name="brand">GIANT</field>
+            <field name="brand_id" ref="bike_brand_giant"/>
             <field name="model">Road Pro</field>
             <field name="year">2023</field>
             <field name="frame_size">m</field>
@@ -73,14 +73,14 @@
         </record>
 
         <record id="demo_bike_4" model="bike.bike">
-            <field name="name">BOSCH E-Bike Urban - #004</field>
+            <field name="name">GIANT E-Bike Urban - #004</field>
             <field name="category_id" ref="category_electric"/>
-            <field name="brand">BOSCH</field>
+            <field name="brand_id" ref="bike_brand_giant"/>
             <field name="model">E-Bike Urban</field>
             <field name="year">2024</field>
             <field name="frame_size">m</field>
             <field name="color">Gris</field>
-            <field name="serial_number">BOSCH-ELEC-004</field>
+            <field name="serial_number">GIANT-ELEC-004</field>
             <field name="state">available</field>
             <field name="condition">new</field>
         </record>
@@ -88,7 +88,7 @@
         <record id="demo_bike_5" model="bike.bike">
             <field name="name">DECATHLON Kids 20" - #005</field>
             <field name="category_id" ref="category_kids"/>
-            <field name="brand">DECATHLON</field>
+            <field name="brand_id" ref="bike_brand_decathlon"/>
             <field name="model">Kids 20 pouces</field>
             <field name="year">2023</field>
             <field name="frame_size">s</field>
@@ -101,7 +101,7 @@
         <record id="demo_bike_6" model="bike.bike">
             <field name="name">TREK Mountain Pro - #006</field>
             <field name="category_id" ref="category_mountain"/>
-            <field name="brand">TREK</field>
+            <field name="brand_id" ref="bike_brand_trek"/>
             <field name="model">Mountain Pro</field>
             <field name="year">2022</field>
             <field name="frame_size">l</field>

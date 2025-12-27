@@ -79,10 +79,15 @@ class BikeOccupancyReport(models.Model):
                     COUNT(ro.id) as total_rentals,
                     COALESCE(SUM(ro.duration_days), 0) as total_days_rented,
                     COALESCE(SUM(ro.subtotal), 0) as total_revenue,
-                    COALESCE(AVG(ro.duration_days), 0) as avg_rental_duration
+                    CASE
+                        WHEN COUNT(ro.id) > 0 THEN AVG(ro.duration_days)
+                        ELSE 0
+                    END as avg_rental_duration
                 FROM bike_bike b
                 LEFT JOIN rental_order ro ON b.id = ro.bike_id
                     AND ro.state IN ('confirmed', 'ongoing', 'done')
+                WHERE b.active = true
                 GROUP BY b.id, b.category_id
+                HAVING COUNT(ro.id) > 0
             )
         """)

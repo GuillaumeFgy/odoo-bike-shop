@@ -130,12 +130,13 @@
                                    placeholder="Description détaillée du vélo (équipements, caractéristiques...)"/>
                         </page>
                         <page string="Notes Internes" name="notes">
-                            <field name="notes" 
+                            <field name="notes"
                                    placeholder="Notes internes (entretien, historique, remarques...)"/>
                         </page>
-                        <page string="Lien Produit" name="product">
+                        <!-- Onglet Lien Produit masqué pour simplifier l'interface -->
+                        <page string="Lien Produit" name="product" invisible="1">
                             <group>
-                                <field name="product_id" 
+                                <field name="product_id"
                                        string="Produit lié"
                                        help="Produit dans le catalogue de vente"/>
                             </group>
