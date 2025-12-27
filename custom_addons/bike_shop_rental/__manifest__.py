@@ -39,10 +39,12 @@
 
         # Data
         'data/bike_category_data.xml',
+        'data/bike_brand_data.xml',
         'data/product_data.xml',
         'data/bike_actions.xml',
 
         # Views
+        'views/bike_brand_views.xml',
         'views/bike_views.xml',
         'views/rental_order_views.xml',
         'views/menu_views.xml',

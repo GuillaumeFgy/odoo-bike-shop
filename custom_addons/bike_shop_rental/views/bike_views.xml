@@ -10,7 +10,7 @@
                   decoration-danger="state=='rented'">
                 <field name="name"/>
                 <field name="category_id"/>
-                <field name="brand"/>
+                <field name="brand_id"/>
                 <field name="model"/>
                 <field name="frame_size"/>
                 <field name="state" widget="badge"
@@ -58,13 +58,14 @@
                     <!-- SECTION 1 : INFORMATIONS PRINCIPALES -->
                     <group string="INFORMATIONS PRINCIPALES">
                         <group>
-                            <field name="category_id" 
+                            <field name="category_id"
                                    string="Catégorie"
                                    placeholder="Ville, Route, VTT..."
                                    required="1"/>
-                            <field name="brand" 
+                            <field name="brand_id"
                                    string="Marque"
-                                   placeholder="TREK, GIANT, SPECIALIZED..."/>
+                                   placeholder="Sélectionnez une marque..."
+                                   options="{'no_create': False, 'no_open': True}"/>
                             <field name="model" 
                                    string="Modèle"
                                    placeholder="City Commuter, Mountain X5..."/>

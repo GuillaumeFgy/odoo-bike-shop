@@ -26,7 +26,12 @@ class Bike(models.Model):
     )
 
     # Caractéristiques techniques
-    brand = fields.Char(string='Marque', tracking=True)
+    brand_id = fields.Many2one(
+        'bike.brand',
+        string='Marque',
+        tracking=True,
+        ondelete='restrict'
+    )
     model = fields.Char(string='Modèle', tracking=True)
     year = fields.Integer(string='Année', tracking=True)
     frame_size = fields.Selection([

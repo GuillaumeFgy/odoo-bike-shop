@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Marques de vélos prédéfinies -->
+
+        <record id="bike_brand_giant" model="bike.brand">
+            <field name="name">Giant</field>
+            <field name="country">Taiwan</field>
+            <field name="website">https://www.giant-bicycles.com</field>
+            <field name="description">Giant est le plus grand fabricant de vélos au monde, fondé en 1972.</field>
+        </record>
+
+        <record id="bike_brand_trek" model="bike.brand">
+            <field name="name">Trek</field>
+            <field name="country">États-Unis</field>
+            <field name="website">https://www.trekbikes.com</field>
+            <field name="description">Trek Bicycle Corporation est l'un des plus grands fabricants de vélos au monde.</field>
+        </record>
+
+        <record id="bike_brand_specialized" model="bike.brand">
+            <field name="name">Specialized</field>
+            <field name="country">États-Unis</field>
+            <field name="website">https://www.specialized.com</field>
+            <field name="description">Specialized conçoit et fabrique des vélos de haute performance depuis 1974.</field>
+        </record>
+
+        <record id="bike_brand_cannondale" model="bike.brand">
+            <field name="name">Cannondale</field>
+            <field name="country">États-Unis</field>
+            <field name="website">https://www.cannondale.com</field>
+            <field name="description">Cannondale est réputé pour ses innovations en matière de cadres en aluminium.</field>
+        </record>
+
+        <record id="bike_brand_scott" model="bike.brand">
+            <field name="name">Scott</field>
+            <field name="country">Suisse</field>
+            <field name="website">https://www.scott-sports.com</field>
+            <field name="description">Scott Sports produit des vélos de montagne et de route de haute qualité.</field>
+        </record>
+
+        <record id="bike_brand_cube" model="bike.brand">
+            <field name="name">Cube</field>
+            <field name="country">Allemagne</field>
+            <field name="website">https://www.cube.eu</field>
+            <field name="description">Cube est un fabricant allemand de vélos fondé en 1993.</field>
+        </record>
+
+        <record id="bike_brand_merida" model="bike.brand">
+            <field name="name">Merida</field>
+            <field name="country">Taiwan</field>
+            <field name="website">https://www.merida-bikes.com</field>
+            <field name="description">Merida est l'un des plus grands fabricants de vélos au monde.</field>
+        </record>
+
+        <record id="bike_brand_bianchi" model="bike.brand">
+            <field name="name">Bianchi</field>
+            <field name="country">Italie</field>
+            <field name="website">https://www.bianchi.com</field>
+            <field name="description">Bianchi est la plus ancienne marque de vélos encore en activité, fondée en 1885.</field>
+        </record>
+
+        <record id="bike_brand_lapierre" model="bike.brand">
+            <field name="name">Lapierre</field>
+            <field name="country">France</field>
+            <field name="website">https://www.lapierre-bikes.com</field>
+            <field name="description">Lapierre est un fabricant français de vélos depuis 1946.</field>
+        </record>
+
+        <record id="bike_brand_decathlon" model="bike.brand">
+            <field name="name">Decathlon (B'Twin/Rockrider)</field>
+            <field name="country">France</field>
+            <field name="website">https://www.decathlon.fr</field>
+            <field name="description">Marques propres de Decathlon pour les vélos de ville et VTT.</field>
+        </record>
+
+        <record id="bike_brand_gazelle" model="bike.brand">
+            <field name="name">Gazelle</field>
+            <field name="country">Pays-Bas</field>
+            <field name="website">https://www.gazellebikes.com</field>
+            <field name="description">Gazelle est un fabricant hollandais de vélos de ville depuis 1892.</field>
+        </record>
+
+        <record id="bike_brand_brompton" model="bike.brand">
+            <field name="name">Brompton</field>
+            <field name="country">Royaume-Uni</field>
+            <field name="website">https://www.brompton.com</field>
+            <field name="description">Brompton est célèbre pour ses vélos pliants britanniques.</field>
+        </record>
+
+    </data>
+</odoo>
