@@ -1,158 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Vue Tree pour les vélos -->
+    <!-- Vue Liste des vélos -->
     <record id="view_bike_tree" model="ir.ui.view">
         <field name="name">bike.bike.tree</field>
         <field name="model">bike.bike</field>
         <field name="arch" type="xml">
-            <list string="Vélos" decoration-success="state=='available'"
+            <list string="Vélos"
+                  decoration-success="state=='available'"
                   decoration-warning="state=='maintenance'"
                   decoration-danger="state=='rented'">
                 <field name="name"/>
                 <field name="category_id"/>
-                <field name="brand_id"/>
                 <field name="model"/>
-                <field name="frame_size"/>
-                <field name="state" widget="badge"
-                       decoration-success="state=='available'"
-                       decoration-warning="state=='maintenance'"
-                       decoration-danger="state=='rented'"/>
+                <field name="state" widget="badge"/>
                 <field name="daily_rate"/>
                 <field name="rental_count"/>
             </list>
         </field>
     </record>
 
-    <!-- Vue Form SIMPLIFIÉE pour les vélos -->
+    <!-- Vue Formulaire des vélos -->
     <record id="view_bike_form" model="ir.ui.view">
         <field name="name">bike.bike.form</field>
         <field name="model">bike.bike</field>
         <field name="arch" type="xml">
             <form string="Vélo">
                 <header>
-                    <button name="action_set_available" type="object"
-                            string="Marquer Disponible"
-                            class="oe_highlight"
-                            invisible="state == 'available'"
-                            help="Rendre le vélo disponible à la location"/>
-                    <button name="action_set_maintenance" type="object"
-                            string="Envoyer en Maintenance"
-                            invisible="state == 'maintenance'"
-                            help="Mettre le vélo en maintenance"/>
-                    <button name="action_assign_default_image" type="object"
-                            string="Assigner Image Auto"
-                            icon="fa-picture-o"
-                            help="Assigner automatiquement une image basée sur le modèle/catégorie"/>
-                    <field name="state" widget="statusbar"
-                           statusbar_visible="available,rented,maintenance"/>
+                    <button name="action_set_available" type="object" string="Disponible"
+                            class="oe_highlight" invisible="state == 'available'"/>
+                    <button name="action_set_maintenance" type="object" string="Maintenance"
+                            invisible="state == 'maintenance'"/>
+                    <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
                     <field name="image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
-                        <label for="name" string="Nom du Vélo"/>
-                        <h1>
-                            <field name="name" placeholder="Ex: TREK City 2023" required="1"/>
-                        </h1>
+                        <h1><field name="name" placeholder="Nom du vélo"/></h1>
                     </div>
-
-                    <!-- SECTION 1 : INFORMATIONS PRINCIPALES -->
-                    <group string="INFORMATIONS PRINCIPALES">
-                        <group>
-                            <field name="category_id"
-                                   string="Catégorie"
-                                   placeholder="Ville, Route, VTT..."
-                                   required="1"/>
-                            <field name="brand_id"
-                                   string="Marque"
-                                   placeholder="Sélectionnez une marque..."
-                                   options="{'no_create': False, 'no_open': True}"/>
-                            <field name="model" 
-                                   string="Modèle"
-                                   placeholder="City Commuter, Mountain X5..."/>
-                            <field name="year" 
-                                   string="Année"/>
+                    <group>
+                        <group string="Informations">
+                            <field name="category_id"/>
+                            <field name="model"/>
+                            <field name="year"/>
+                            <field name="frame_size"/>
+                            <field name="color"/>
+                            <field name="serial_number"/>
                         </group>
-                        <group>
-                            <field name="frame_size" 
-                                   string="Taille du cadre"/>
-                            <field name="color" 
-                                   string="Couleur"
-                                   placeholder="Noir, Bleu, Rouge..."/>
-                            <field name="condition" 
-                                   string="État"
-                                   widget="radio"
-                                   options="{'horizontal': true}"/>
-                            <field name="serial_number" 
-                                   string="Numéro de série"
-                                   placeholder="Ex: ABC123456"/>
+                        <group string="Tarification">
+                            <field name="hourly_rate"/>
+                            <field name="daily_rate"/>
+                            <field name="weekly_rate"/>
+                            <field name="monthly_rate"/>
                         </group>
                     </group>
-
-                    <!-- SECTION 2 : TARIFICATION -->
-                    <group string="TARIFICATION">
-                        <group>
-                            <field name="hourly_rate" 
-                                   string="Tarif horaire"
-                                   placeholder="Ex: 5.00"/>
-                            <field name="daily_rate" 
-                                   string="Tarif journalier"
-                                   placeholder="Ex: 25.00"/>
-                        </group>
-                        <group>
-                            <field name="weekly_rate" 
-                                   string="Tarif hebdomadaire"
-                                   placeholder="Ex: 100.00"/>
-                            <field name="monthly_rate" 
-                                   string="Tarif mensuel"
-                                   placeholder="Ex: 300.00"/>
-                        </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1"/>
                     </group>
-
-                    <!-- SECTION 3 : STATISTIQUES -->
-                    <group string="STATISTIQUES" invisible="rental_count == 0">
-                        <group>
-                            <field name="rental_count" string="Nombre de locations" readonly="1"/>
-                            <field name="total_rental_days" string="Jours loués au total" readonly="1"/>
-                            <field name="last_rental_date" string="Dernière location" readonly="1"/>
-                        </group>
-                        <group>
-                            <button name="action_view_rentals" type="object"
-                                    string="Voir l'Historique des Locations"
-                                    class="oe_highlight"
-                                    icon="fa-history"/>
-                        </group>
+                    <group string="Statistiques" invisible="rental_count == 0">
+                        <field name="rental_count"/>
+                        <button name="action_view_rentals" type="object" string="Voir les locations" class="oe_link"/>
                     </group>
-
-                    <!-- ONGLETS SECONDAIRES -->
-                    <notebook>
-                        <page string="Description" name="description">
-                            <field name="description" 
-                                   placeholder="Description détaillée du vélo (équipements, caractéristiques...)"/>
-                        </page>
-                        <page string="Notes Internes" name="notes">
-                            <field name="notes"
-                                   placeholder="Notes internes (entretien, historique, remarques...)"/>
-                        </page>
-                        <!-- Onglet Lien Produit masqué pour simplifier l'interface -->
-                        <page string="Lien Produit" name="product" invisible="1">
-                            <group>
-                                <field name="product_id"
-                                       string="Produit lié"
-                                       help="Produit dans le catalogue de vente"/>
-                            </group>
-                        </page>
-                    </notebook>
                 </sheet>
-                <!-- CHATTER masqué par défaut -->
-                <div class="oe_chatter" invisible="rental_count == 0">
-                    <field name="message_follower_ids" groups="base.group_user"/>
-                    <field name="message_ids"/>
-                </div>
             </form>
         </field>
     </record>
 
-    <!-- Vue Kanban pour les vélos -->
+    <!-- Vue Kanban des vélos -->
     <record id="view_bike_kanban" model="ir.ui.view">
         <field name="name">bike.bike.kanban</field>
         <field name="model">bike.bike</field>
@@ -167,23 +80,11 @@
                 <templates>
                     <t t-name="card">
                         <div class="oe_kanban_global_click">
-                            <div class="o_kanban_image">
-                                <field name="image" widget="image" class="o_image_64_contain"/>
-                            </div>
-                            <div class="oe_kanban_details">
-                                <strong class="o_kanban_record_title">
-                                    <field name="name"/>
-                                </strong>
-                                <div>
-                                    <field name="category_id"/>
-                                </div>
-                                <div>
-                                    <field name="state" widget="badge"/>
-                                </div>
-                                <div>
-                                    <strong><field name="daily_rate"/> €/jour</strong>
-                                </div>
-                            </div>
+                            <field name="image" widget="image" class="o_image_64_contain"/>
+                            <strong><field name="name"/></strong>
+                            <div><field name="category_id"/></div>
+                            <div><field name="state" widget="badge"/></div>
+                            <div><field name="daily_rate"/> €/jour</div>
                         </div>
                     </t>
                 </templates>
@@ -191,28 +92,19 @@
         </field>
     </record>
 
-
-    <!-- Action pour les vélos -->
+    <!-- Action vélos -->
     <record id="action_bike" model="ir.actions.act_window">
         <field name="name">Vélos</field>
         <field name="res_model">bike.bike</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Créez votre premier vélo
-            </p>
-            <p>
-                Ajoutez les vélos disponibles à la location dans votre magasin.
-            </p>
-        </field>
     </record>
 
-    <!-- Vue Tree pour les catégories -->
+    <!-- Vue Liste des catégories -->
     <record id="view_bike_category_tree" model="ir.ui.view">
         <field name="name">bike.category.tree</field>
         <field name="model">bike.category</field>
         <field name="arch" type="xml">
-            <list string="Catégories de Vélos">
+            <list string="Catégories">
                 <field name="sequence" widget="handle"/>
                 <field name="name"/>
                 <field name="hourly_rate"/>
@@ -224,19 +116,18 @@
         </field>
     </record>
 
-    <!-- Vue Form pour les catégories -->
+    <!-- Vue Formulaire des catégories -->
     <record id="view_bike_category_form" model="ir.ui.view">
         <field name="name">bike.category.form</field>
         <field name="model">bike.category</field>
         <field name="arch" type="xml">
-            <form string="Catégorie de Vélo">
+            <form string="Catégorie">
                 <sheet>
                     <group>
                         <field name="name"/>
                         <field name="sequence"/>
-                        <field name="active"/>
                     </group>
-                    <group string="Tarification par Défaut">
+                    <group string="Tarification par défaut">
                         <group>
                             <field name="hourly_rate"/>
                             <field name="daily_rate"/>
@@ -247,17 +138,15 @@
                         </group>
                     </group>
                     <group>
-                        <field name="description" placeholder="Description de la catégorie..."/>
-                    </group>
-                    <group>
-                        <field name="bike_count"/>
+                        <field name="description"/>
+                        <field name="bike_count" readonly="1"/>
                     </group>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Action pour les catégories -->
+    <!-- Action catégories -->
     <record id="action_bike_category" model="ir.actions.act_window">
         <field name="name">Catégories de Vélos</field>
         <field name="res_model">bike.category</field>

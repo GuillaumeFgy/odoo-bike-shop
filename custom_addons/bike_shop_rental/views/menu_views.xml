@@ -31,14 +31,8 @@
               sequence="90"/>
 
     <menuitem id="menu_bike_category"
-              name="Catégories de Vélos"
+              name="Catégories"
               parent="menu_bike_shop_config"
               action="action_bike_category"
               sequence="10"/>
-
-    <menuitem id="menu_bike_brand"
-              name="Marques"
-              parent="menu_bike_shop_config"
-              action="action_bike_brand"
-              sequence="15"/>
 </odoo>
