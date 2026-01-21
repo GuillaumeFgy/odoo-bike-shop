@@ -1,11 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_bike_category_user,bike.category.user,model_bike_category,base.group_user,1,1,1,0
-access_bike_category_manager,bike.category.manager,model_bike_category,sales_team.group_sale_manager,1,1,1,1
-access_bike_bike_user,bike.bike.user,model_bike_bike,base.group_user,1,1,1,0
-access_bike_bike_manager,bike.bike.manager,model_bike_bike,sales_team.group_sale_manager,1,1,1,1
-access_rental_order_user,rental.order.user,model_rental_order,base.group_user,1,1,1,0
-access_rental_order_manager,rental.order.manager,model_rental_order,sales_team.group_sale_manager,1,1,1,1
-access_rental_report_user,rental.report.user,model_rental_report,base.group_user,1,0,0,0
-access_rental_report_manager,rental.report.manager,model_rental_report,sales_team.group_sale_manager,1,0,0,0
-access_bike_occupancy_report_user,bike.occupancy.report.user,model_bike_occupancy_report,base.group_user,1,0,0,0
-access_bike_occupancy_report_manager,bike.occupancy.report.manager,model_bike_occupancy_report,sales_team.group_sale_manager,1,0,0,0
+access_bike_category,bike.category.user,model_bike_category,base.group_user,1,1,1,1
+access_bike_bike,bike.bike.user,model_bike_bike,base.group_user,1,1,1,1
+access_rental_order,rental.order.user,model_rental_order,base.group_user,1,1,1,1
+access_rental_report,rental.report.user,model_rental_report,base.group_user,1,0,0,0
+access_bike_occupancy_report,bike.occupancy.report.user,model_bike_occupancy_report,base.group_user,1,0,0,0

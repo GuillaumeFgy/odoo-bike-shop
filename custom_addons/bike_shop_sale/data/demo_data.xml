@@ -2,59 +2,100 @@
 <odoo>
     <data noupdate="1">
         <!-- Vélos à vendre -->
-        <record id="product_bike_city" model="product.template">
-            <field name="name">Vélo de Ville</field>
-            <field name="bike_shop_type">bike</field>
-            <field name="type">product</field>
-            <field name="list_price">599.00</field>
+        <record id="product_bike_city" model="shop.product">
+            <field name="name">Vélo de Ville Classique</field>
+            <field name="product_type">bike</field>
+            <field name="description">Vélo de ville confortable pour les trajets quotidiens</field>
+            <field name="price">599.00</field>
+            <field name="cost">350.00</field>
+            <field name="quantity">5</field>
         </record>
 
-        <record id="product_bike_mtb" model="product.template">
+        <record id="product_bike_mtb" model="shop.product">
             <field name="name">VTT Sport</field>
-            <field name="bike_shop_type">bike</field>
-            <field name="type">product</field>
-            <field name="list_price">899.00</field>
+            <field name="product_type">bike</field>
+            <field name="description">VTT robuste pour les sentiers</field>
+            <field name="price">899.00</field>
+            <field name="cost">550.00</field>
+            <field name="quantity">3</field>
+        </record>
+
+        <record id="product_bike_electric" model="shop.product">
+            <field name="name">Vélo Électrique Urban</field>
+            <field name="product_type">bike</field>
+            <field name="description">Vélo électrique pour la ville</field>
+            <field name="price">1499.00</field>
+            <field name="cost">900.00</field>
+            <field name="quantity">2</field>
         </record>
 
         <!-- Accessoires -->
-        <record id="product_helmet" model="product.template">
-            <field name="name">Casque</field>
-            <field name="bike_shop_type">accessory</field>
-            <field name="type">product</field>
-            <field name="list_price">49.99</field>
+        <record id="product_helmet" model="shop.product">
+            <field name="name">Casque de Protection</field>
+            <field name="product_type">accessory</field>
+            <field name="description">Casque homologué CE</field>
+            <field name="price">49.99</field>
+            <field name="cost">25.00</field>
+            <field name="quantity">15</field>
         </record>
 
-        <record id="product_lock" model="product.template">
-            <field name="name">Antivol</field>
-            <field name="bike_shop_type">accessory</field>
-            <field name="type">product</field>
-            <field name="list_price">39.99</field>
+        <record id="product_lock" model="shop.product">
+            <field name="name">Antivol U</field>
+            <field name="product_type">accessory</field>
+            <field name="description">Antivol en U haute sécurité</field>
+            <field name="price">39.99</field>
+            <field name="cost">18.00</field>
+            <field name="quantity">20</field>
+        </record>
+
+        <record id="product_lights" model="shop.product">
+            <field name="name">Kit Éclairage LED</field>
+            <field name="product_type">accessory</field>
+            <field name="description">Feux avant et arrière LED rechargeables</field>
+            <field name="price">29.99</field>
+            <field name="cost">12.00</field>
+            <field name="quantity">25</field>
         </record>
 
         <!-- Pièces détachées -->
-        <record id="product_tube" model="product.template">
-            <field name="name">Chambre à Air</field>
-            <field name="bike_shop_type">part</field>
-            <field name="type">product</field>
-            <field name="list_price">7.99</field>
+        <record id="product_tube" model="shop.product">
+            <field name="name">Chambre à Air 26"</field>
+            <field name="product_type">part</field>
+            <field name="description">Chambre à air standard 26 pouces</field>
+            <field name="price">7.99</field>
+            <field name="cost">3.00</field>
+            <field name="quantity">50</field>
+        </record>
+
+        <record id="product_brake_pads" model="shop.product">
+            <field name="name">Plaquettes de Frein</field>
+            <field name="product_type">part</field>
+            <field name="description">Jeu de plaquettes de frein</field>
+            <field name="price">15.99</field>
+            <field name="cost">6.00</field>
+            <field name="quantity">30</field>
         </record>
 
         <!-- Commande de vente exemple -->
-        <record id="demo_sale_order" model="sale.order">
-            <field name="partner_id" ref="bike_shop_rental.demo_partner_1"/>
-            <field name="state">sale</field>
+        <record id="demo_shop_order" model="shop.order">
+            <field name="customer_name">Jean Dupont</field>
+            <field name="customer_phone">+33 1 23 45 67 89</field>
+            <field name="customer_email">jean.dupont@example.com</field>
+            <field name="state">done</field>
         </record>
 
-        <record id="demo_sale_line_1" model="sale.order.line">
-            <field name="order_id" ref="demo_sale_order"/>
-            <field name="product_template_id" ref="product_bike_city"/>
-            <field name="product_uom_qty">1</field>
+        <record id="demo_shop_order_line_1" model="shop.order.line">
+            <field name="order_id" ref="demo_shop_order"/>
+            <field name="product_id" ref="product_helmet"/>
+            <field name="quantity">1</field>
+            <field name="unit_price">49.99</field>
         </record>
 
-        <record id="demo_sale_line_2" model="sale.order.line">
-            <field name="order_id" ref="demo_sale_order"/>
-            <field name="product_template_id" ref="product_helmet"/>
-            <field name="product_uom_qty">1</field>
+        <record id="demo_shop_order_line_2" model="shop.order.line">
+            <field name="order_id" ref="demo_shop_order"/>
+            <field name="product_id" ref="product_lock"/>
+            <field name="quantity">1</field>
+            <field name="unit_price">39.99</field>
         </record>
     </data>
 </odoo>

@@ -9,19 +9,12 @@
     <menuitem id="menu_sale_order"
               name="Commandes"
               parent="menu_bike_shop_sale"
-              action="action_sale_order_bike_shop"
+              action="action_shop_order"
               sequence="10"/>
 
     <menuitem id="menu_products"
               name="Produits"
               parent="menu_bike_shop_sale"
-              action="action_product_bike_shop"
+              action="action_shop_product"
               sequence="20"/>
-
-    <!-- Lien vers Stock -->
-    <menuitem id="menu_stock_bike_shop"
-              name="Stock"
-              parent="bike_shop_rental.menu_bike_shop_root"
-              action="stock.action_picking_tree_all"
-              sequence="30"/>
 </odoo>

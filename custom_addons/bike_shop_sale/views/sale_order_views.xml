@@ -1,9 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Action pour les commandes de vente -->
-    <record id="action_sale_order_bike_shop" model="ir.actions.act_window">
+    <!-- Vue Liste des commandes -->
+    <record id="view_shop_order_tree" model="ir.ui.view">
+        <field name="name">shop.order.tree</field>
+        <field name="model">shop.order</field>
+        <field name="arch" type="xml">
+            <list string="Commandes"
+                  decoration-info="state=='draft'"
+                  decoration-success="state=='done'"
+                  decoration-warning="state=='confirmed'"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="customer_name"/>
+                <field name="total"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire des commandes -->
+    <record id="view_shop_order_form" model="ir.ui.view">
+        <field name="name">shop.order.form</field>
+        <field name="model">shop.order</field>
+        <field name="arch" type="xml">
+            <form string="Commande">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirmer"
+                            class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Terminer"
+                            class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" type="object" string="Annuler"
+                            invisible="state in ['done', 'cancelled']"/>
+                    <button name="action_draft" type="object" string="Remettre en brouillon"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="Client">
+                            <field name="customer_name" placeholder="Nom du client"/>
+                            <field name="customer_phone" placeholder="+33 6 12 34 56 78"/>
+                            <field name="customer_email" placeholder="email@exemple.com"/>
+                        </group>
+                        <group string="Commande">
+                            <field name="date"/>
+                        </group>
+                    </group>
+
+                    <field name="line_ids">
+                        <list string="Lignes de commande" editable="bottom">
+                            <field name="product_id"/>
+                            <field name="quantity"/>
+                            <field name="unit_price"/>
+                            <field name="subtotal"/>
+                        </list>
+                    </field>
+
+                    <group class="oe_subtotal_footer">
+                        <field name="total" class="oe_subtotal_footer_separator"/>
+                    </group>
+
+                    <field name="notes" placeholder="Notes..."/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Kanban des commandes -->
+    <record id="view_shop_order_kanban" model="ir.ui.view">
+        <field name="name">shop.order.kanban</field>
+        <field name="model">shop.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="name"/>
+                <field name="customer_name"/>
+                <field name="date"/>
+                <field name="total"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="customer_name"/></div>
+                            <div class="text-muted"><field name="date"/></div>
+                            <div class="mt-2">
+                                <strong><field name="total"/> €</strong>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action commandes -->
+    <record id="action_shop_order" model="ir.actions.act_window">
         <field name="name">Commandes</field>
-        <field name="res_model">sale.order</field>
-        <field name="view_mode">list,form</field>
+        <field name="res_model">shop.order</field>
+        <field name="view_mode">list,kanban,form</field>
+    </record>
+
+    <!-- Séquence numéros de commande -->
+    <record id="seq_shop_order" model="ir.sequence">
+        <field name="name">Numéro de Commande Vente</field>
+        <field name="code">shop.order</field>
+        <field name="prefix">CMD</field>
+        <field name="padding">5</field>
     </record>
 </odoo>

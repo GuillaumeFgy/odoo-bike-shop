@@ -1,23 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Ajout du champ type sur le formulaire produit -->
-    <record id="view_product_template_form_inherit" model="ir.ui.view">
-        <field name="name">product.template.form.inherit.bike.shop</field>
-        <field name="model">product.template</field>
-        <field name="inherit_id" ref="product.product_template_only_form_view"/>
+    <!-- Vue Liste des produits -->
+    <record id="view_shop_product_tree" model="ir.ui.view">
+        <field name="name">shop.product.tree</field>
+        <field name="model">shop.product</field>
         <field name="arch" type="xml">
-            <xpath expr="//field[@name='categ_id']" position="after">
-                <field name="bike_shop_type"/>
-            </xpath>
+            <list string="Produits">
+                <field name="name"/>
+                <field name="product_type"/>
+                <field name="price"/>
+                <field name="quantity"/>
+            </list>
         </field>
     </record>
 
-    <!-- Action pour tous les produits du magasin -->
-    <record id="action_product_bike_shop" model="ir.actions.act_window">
+    <!-- Vue Formulaire des produits -->
+    <record id="view_shop_product_form" model="ir.ui.view">
+        <field name="name">shop.product.form</field>
+        <field name="model">shop.product</field>
+        <field name="arch" type="xml">
+            <form string="Produit">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom du produit"/></h1>
+                    </div>
+                    <group>
+                        <group string="Informations">
+                            <field name="product_type"/>
+                            <field name="description" placeholder="Description..."/>
+                        </group>
+                        <group string="Prix et Stock">
+                            <field name="price"/>
+                            <field name="cost"/>
+                            <field name="margin"/>
+                            <field name="quantity"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Kanban des produits -->
+    <record id="view_shop_product_kanban" model="ir.ui.view">
+        <field name="name">shop.product.kanban</field>
+        <field name="model">shop.product</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="name"/>
+                <field name="product_type"/>
+                <field name="price"/>
+                <field name="quantity"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <strong><field name="name"/></strong>
+                            <div><field name="product_type"/></div>
+                            <div class="mt-2">
+                                <strong><field name="price"/> €</strong>
+                            </div>
+                            <div class="text-muted">
+                                Stock: <field name="quantity"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action produits -->
+    <record id="action_shop_product" model="ir.actions.act_window">
         <field name="name">Produits</field>
-        <field name="res_model">product.template</field>
-        <field name="view_mode">list,form</field>
-        <field name="domain">[('bike_shop_type', '!=', False)]</field>
-        <field name="context">{'default_detailed_type': 'product'}</field>
+        <field name="res_model">shop.product</field>
+        <field name="view_mode">list,kanban,form</field>
     </record>
 </odoo>

@@ -5,13 +5,10 @@
     'summary': 'Location de vélos',
     'depends': [
         'base',
-        'sale_management',
-        'stock',
     ],
     'data': [
         'security/ir.model.access.csv',
         'data/bike_category_data.xml',
-        'data/product_data.xml',
         'views/bike_views.xml',
         'views/rental_order_views.xml',
         'views/menu_views.xml',
