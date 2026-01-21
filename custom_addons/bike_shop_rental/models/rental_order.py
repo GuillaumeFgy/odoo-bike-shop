@@ -13,17 +13,17 @@ class RentalOrder(models.Model):
 
     # Client
     partner_id = fields.Many2one('res.partner', string='Client Existant')
-    customer_name = fields.Char(string='Nom du Client', compute='_compute_customer_name', store=True, readonly=False, required=True)
+    customer_name = fields.Char(string='Nom du Client', compute='_compute_customer_name', store=True, readonly=False)
     partner_phone = fields.Char(string='Téléphone')
     partner_email = fields.Char(string='Email')
 
     # Vélo
-    bike_id = fields.Many2one('bike.bike', string='Vélo', required=True, domain="[('state', '=', 'available')]")
+    bike_id = fields.Many2one('bike.bike', string='Vélo', domain="[('state', '=', 'available')]")
     bike_category = fields.Char(related='bike_id.category_id.name', string='Catégorie', store=True)
 
     # Période de location
-    start_date = fields.Datetime(string='Date de Début', required=True, default=fields.Datetime.now)
-    end_date = fields.Datetime(string='Date de Fin', required=True)
+    start_date = fields.Datetime(string='Date de Début', default=fields.Datetime.now)
+    end_date = fields.Datetime(string='Date de Fin')
     actual_return_date = fields.Datetime(string='Date de Retour Réelle')
 
     # Durée
@@ -36,7 +36,7 @@ class RentalOrder(models.Model):
         ('daily', 'Journalier'),
         ('weekly', 'Hebdomadaire'),
         ('monthly', 'Mensuel'),
-    ], string='Type', required=True, default='daily')
+    ], string='Type', default='daily')
 
     unit_price = fields.Float(string='Prix Unitaire (€)', compute='_compute_unit_price', store=True, readonly=False)
     quantity = fields.Float(string='Quantité', compute='_compute_quantity', store=True)
@@ -122,55 +122,57 @@ class RentalOrder(models.Model):
             rental.subtotal = rental.unit_price * rental.quantity
             rental.total_amount = rental.subtotal
 
-    @api.constrains('start_date', 'end_date')
+    @api.constrains('start_date', 'end_date', 'state')
     def _check_rental_dates(self):
-        """Vérifie que les dates sont cohérentes"""
+        """Vérifie que les dates sont cohérentes (sauf si annulé)"""
         for record in self:
-            if record.end_date and record.start_date:
+            if record.state != 'cancelled' and record.end_date and record.start_date:
                 if record.end_date <= record.start_date:
                     raise exceptions.ValidationError("La date de fin doit être après la date de début.")
 
-    @api.constrains('rental_type', 'start_date', 'end_date')
+    @api.constrains('rental_type', 'start_date', 'end_date', 'state')
     def _check_rental_type_duration(self):
-        """Vérifie que le type de location correspond à la durée"""
+        """Vérifie que le type de location correspond à la durée (sauf si annulé)"""
         for record in self:
-            if record.start_date and record.end_date and record.rental_type:
+            if record.state != 'cancelled' and record.start_date and record.end_date and record.rental_type:
                 duration_days = record.duration_days
+                # Afficher en jours entiers dans le message
+                duration_days_int = int(duration_days)
 
                 if record.rental_type == 'monthly' and duration_days < 30:
                     raise exceptions.ValidationError(
                         "Pour une location mensuelle, la durée doit être d'au moins 30 jours. "
-                        f"Durée actuelle : {duration_days:.1f} jours."
+                        f"Durée actuelle : {duration_days_int} jour(s)."
                     )
                 elif record.rental_type == 'weekly' and duration_days < 7:
                     raise exceptions.ValidationError(
                         "Pour une location hebdomadaire, la durée doit être d'au moins 7 jours. "
-                        f"Durée actuelle : {duration_days:.1f} jours."
+                        f"Durée actuelle : {duration_days_int} jour(s)."
                     )
                 elif record.rental_type == 'daily' and duration_days < 1:
                     raise exceptions.ValidationError(
                         "Pour une location journalière, la durée doit être d'au moins 1 jour. "
-                        f"Durée actuelle : {duration_days:.1f} jours."
+                        f"Durée actuelle : {duration_days_int} jour(s)."
                     )
 
-    @api.constrains('partner_email')
+    @api.constrains('partner_email', 'state')
     def _check_email(self):
-        """Vérifie le format de l'email"""
+        """Vérifie le format de l'email (sauf si annulé)"""
         email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
         for record in self:
-            if record.partner_email and not re.match(email_regex, record.partner_email):
+            if record.state != 'cancelled' and record.partner_email and not re.match(email_regex, record.partner_email):
                 raise exceptions.ValidationError(
                     f"L'email '{record.partner_email}' n'est pas valide. "
                     "Format attendu : exemple@domaine.com"
                 )
 
-    @api.constrains('partner_phone')
+    @api.constrains('partner_phone', 'state')
     def _check_phone(self):
-        """Vérifie le format du téléphone"""
+        """Vérifie le format du téléphone (sauf si annulé)"""
         # Accepte les formats: +33612345678, 0612345678, +33 6 12 34 56 78, etc.
         phone_regex = r'^(\+\d{1,3}[\s.-]?)?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,4}[\s.-]?\d{1,9}$'
         for record in self:
-            if record.partner_phone:
+            if record.state != 'cancelled' and record.partner_phone:
                 # Enlever les espaces pour vérifier qu'il y a assez de chiffres
                 phone_digits = re.sub(r'[^\d]', '', record.partner_phone)
                 if len(phone_digits) < 10:
@@ -184,24 +186,52 @@ class RentalOrder(models.Model):
                         "Format attendu : +33612345678 ou 0612345678"
                     )
 
-    @api.constrains('customer_name')
+    @api.constrains('customer_name', 'state')
     def _check_customer_name(self):
-        """Vérifie que le nom du client n'est pas vide"""
+        """Vérifie que le nom du client n'est pas vide (sauf si annulé)"""
         for record in self:
-            if not record.customer_name or not record.customer_name.strip():
+            if record.state != 'cancelled':
+                if not record.customer_name or not record.customer_name.strip():
+                    raise exceptions.ValidationError(
+                        "Le nom du client est obligatoire."
+                    )
+                if len(record.customer_name.strip()) < 2:
+                    raise exceptions.ValidationError(
+                        "Le nom du client doit contenir au moins 2 caractères."
+                    )
+
+    @api.constrains('bike_id', 'state')
+    def _check_bike_id(self):
+        """Vérifie qu'un vélo est sélectionné (sauf si annulé)"""
+        for record in self:
+            if record.state != 'cancelled' and not record.bike_id:
                 raise exceptions.ValidationError(
-                    "Le nom du client est obligatoire."
-                )
-            if len(record.customer_name.strip()) < 2:
-                raise exceptions.ValidationError(
-                    "Le nom du client doit contenir au moins 2 caractères."
+                    "Vous devez sélectionner un vélo."
                 )
 
-    @api.constrains('start_date')
+    @api.constrains('start_date', 'end_date', 'rental_type', 'state')
+    def _check_required_fields(self):
+        """Vérifie que les champs requis sont remplis (sauf si annulé)"""
+        for record in self:
+            if record.state != 'cancelled':
+                if not record.start_date:
+                    raise exceptions.ValidationError(
+                        "La date de début est obligatoire."
+                    )
+                if not record.end_date:
+                    raise exceptions.ValidationError(
+                        "La date de fin est obligatoire."
+                    )
+                if not record.rental_type:
+                    raise exceptions.ValidationError(
+                        "Le type de location est obligatoire."
+                    )
+
+    @api.constrains('start_date', 'state')
     def _check_start_date(self):
         """Vérifie que la date de début n'est pas dans le passé pour les nouveaux contrats"""
         for record in self:
-            # Seulement pour les nouveaux contrats en brouillon
+            # Seulement pour les nouveaux contrats en brouillon (pas annulés)
             if record.state == 'draft' and record.start_date and record.start_date < fields.Datetime.now():
                 raise exceptions.ValidationError(
                     "La date de début ne peut pas être dans le passé."

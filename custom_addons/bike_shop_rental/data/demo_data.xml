@@ -6,7 +6,7 @@
             <field name="name">Jean Dupont</field>
             <field name="city">Paris</field>
             <field name="country_id" ref="base.fr"/>
-            <field name="phone">+33 1 23 45 67 89</field>
+            <field name="phone">+33123456789</field>
             <field name="email">jean.dupont@example.com</field>
         </record>
 
@@ -14,7 +14,7 @@
             <field name="name">Marie Martin</field>
             <field name="city">Lyon</field>
             <field name="country_id" ref="base.fr"/>
-            <field name="phone">+33 4 12 34 56 78</field>
+            <field name="phone">+33412345678</field>
             <field name="email">marie.martin@example.com</field>
         </record>
 
@@ -22,7 +22,7 @@
             <field name="name">Pierre Durant</field>
             <field name="city">Marseille</field>
             <field name="country_id" ref="base.fr"/>
-            <field name="phone">+33 4 98 76 54 32</field>
+            <field name="phone">+33498765432</field>
             <field name="email">pierre.durant@example.com</field>
         </record>
 
@@ -35,6 +35,8 @@
             <field name="frame_size">m</field>
             <field name="color">Bleu</field>
             <field name="serial_number">CITY-001</field>
+            <field name="confirmation_state">confirmed</field>
+            <field name="confirmation_state">confirmed</field>
             <field name="state">available</field>
         </record>
 
@@ -46,6 +48,7 @@
             <field name="frame_size">l</field>
             <field name="color">Noir</field>
             <field name="serial_number">MTB-002</field>
+            <field name="confirmation_state">confirmed</field>
             <field name="state">available</field>
         </record>
 
@@ -57,6 +60,7 @@
             <field name="frame_size">m</field>
             <field name="color">Rouge</field>
             <field name="serial_number">ROAD-003</field>
+            <field name="confirmation_state">confirmed</field>
             <field name="state">available</field>
         </record>
 
@@ -68,6 +72,7 @@
             <field name="frame_size">m</field>
             <field name="color">Gris</field>
             <field name="serial_number">ELEC-004</field>
+            <field name="confirmation_state">confirmed</field>
             <field name="state">available</field>
         </record>
 
@@ -79,6 +84,7 @@
             <field name="frame_size">s</field>
             <field name="color">Jaune</field>
             <field name="serial_number">KIDS-005</field>
+            <field name="confirmation_state">confirmed</field>
             <field name="state">available</field>
         </record>
 
@@ -90,6 +96,7 @@
             <field name="frame_size">l</field>
             <field name="color">Vert</field>
             <field name="serial_number">MTB-006</field>
+            <field name="confirmation_state">confirmed</field>
             <field name="state">rented</field>
         </record>
 

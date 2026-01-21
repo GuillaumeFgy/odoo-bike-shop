@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from odoo import models, fields, api, exceptions
 
 
@@ -47,6 +48,36 @@ class ShopOrder(models.Model):
                     f"La date de commande ne peut pas être dans le passé. "
                     f"Date saisie : {order.date}, Date actuelle : {fields.Date.today()}"
                 )
+
+    @api.constrains('customer_email')
+    def _check_email(self):
+        """Vérifie le format de l'email"""
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        for order in self:
+            if order.customer_email and not re.match(email_regex, order.customer_email):
+                raise exceptions.ValidationError(
+                    f"L'email '{order.customer_email}' n'est pas valide. "
+                    "Format attendu : exemple@domaine.com"
+                )
+
+    @api.constrains('customer_phone')
+    def _check_phone(self):
+        """Vérifie le format du téléphone"""
+        phone_regex = r'^(\+\d{1,3}[\s.-]?)?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,4}[\s.-]?\d{1,9}$'
+        for order in self:
+            if order.customer_phone:
+                # Enlever les espaces pour vérifier qu'il y a assez de chiffres
+                phone_digits = re.sub(r'[^\d]', '', order.customer_phone)
+                if len(phone_digits) < 10:
+                    raise exceptions.ValidationError(
+                        f"Le numéro de téléphone '{order.customer_phone}' n'est pas valide. "
+                        "Il doit contenir au moins 10 chiffres."
+                    )
+                if not re.match(phone_regex, order.customer_phone):
+                    raise exceptions.ValidationError(
+                        f"Le numéro de téléphone '{order.customer_phone}' n'est pas valide. "
+                        "Format attendu : +33612345678 ou 0612345678"
+                    )
 
     @api.model_create_multi
     def create(self, vals_list):

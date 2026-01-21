@@ -53,7 +53,7 @@
                             <field name="partner_id" options="{'no_open': True, 'no_create': True}" placeholder="Ou sélectionner un client existant..." invisible="1"/>
                         </group>
                         <group string="Vélo">
-                            <field name="bike_id" domain="[('state', '=', 'available')]" options="{'no_open': True, 'no_create': True}" placeholder="Rechercher un vélo..."/>
+                            <field name="bike_id" domain="[('state', '=', 'available'), ('confirmation_state', '=', 'confirmed')]" options="{'no_open': True, 'no_create': True}" placeholder="Rechercher un vélo..."/>
                             <field name="bike_category" readonly="1"/>
                         </group>
                     </group>

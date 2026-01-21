@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
 
 
 class BikeCategory(models.Model):
@@ -33,6 +33,27 @@ class BikeCategory(models.Model):
             category.bike_count = self.env['bike.bike'].search_count([
                 ('category_id', '=', category.id)
             ])
+
+    @api.constrains('hourly_rate', 'daily_rate', 'weekly_rate', 'monthly_rate')
+    def _check_rates(self):
+        """Vérifie que les tarifs ne sont pas négatifs"""
+        for category in self:
+            if category.hourly_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif horaire ne peut pas être négatif."
+                )
+            if category.daily_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif journalier ne peut pas être négatif."
+                )
+            if category.weekly_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif hebdomadaire ne peut pas être négatif."
+                )
+            if category.monthly_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif mensuel ne peut pas être négatif."
+                )
 
     _sql_constraints = [
         ('name_unique', 'UNIQUE(name)', 'Le nom de la catégorie doit être unique!')

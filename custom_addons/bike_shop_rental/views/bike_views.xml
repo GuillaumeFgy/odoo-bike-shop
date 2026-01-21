@@ -26,11 +26,14 @@
         <field name="arch" type="xml">
             <form string="Vélo">
                 <header>
+                    <button name="action_confirm_and_return" type="object" string="Confirmer"
+                            class="btn-primary" invisible="confirmation_state != 'draft'"/>
                     <button name="action_set_available" type="object" string="Disponible"
-                            class="oe_highlight" invisible="state == 'available'"/>
+                            class="oe_highlight" invisible="state == 'available' or confirmation_state == 'draft'"/>
                     <button name="action_set_maintenance" type="object" string="Maintenance"
-                            invisible="state == 'maintenance'"/>
-                    <field name="state" widget="statusbar"/>
+                            invisible="state == 'maintenance' or confirmation_state == 'draft'"/>
+                    <field name="confirmation_state" widget="statusbar" statusbar_visible="draft,confirmed"/>
+                    <field name="state" widget="statusbar" invisible="confirmation_state == 'draft'"/>
                 </header>
                 <sheet>
                     <div class="oe_button_box" name="button_box">
@@ -113,6 +116,8 @@
         <field name="name">Vélos</field>
         <field name="res_model">bike.bike</field>
         <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('confirmation_state', '=', 'confirmed')]</field>
+        <field name="context">{'default_confirmation_state': 'draft'}</field>
     </record>
 
     <!-- Vue Liste des catégories -->

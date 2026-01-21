@@ -24,6 +24,12 @@ class Bike(models.Model):
     color = fields.Char(string='Couleur')
     serial_number = fields.Char(string='Numéro de Série')
 
+    # État de confirmation
+    confirmation_state = fields.Selection([
+        ('draft', 'Brouillon'),
+        ('confirmed', 'Confirmé'),
+    ], string='État de confirmation', default='draft', required=True)
+
     # État et disponibilité
     state = fields.Selection([
         ('available', 'Disponible'),
@@ -65,6 +71,17 @@ class Bike(models.Model):
         for bike in self:
             bike.rental_count = self.env['rental.order'].search_count([('bike_id', '=', bike.id)])
 
+    def action_confirm_and_return(self):
+        """Confirme le vélo et retourne à la liste"""
+        self.ensure_one()
+        self.confirmation_state = 'confirmed'
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'bike.bike',
+            'view_mode': 'kanban,list,form',
+            'target': 'current',
+        }
+
     def action_set_available(self):
         """Marque le vélo comme disponible"""
         self.write({'state': 'available'})
@@ -82,6 +99,27 @@ class Bike(models.Model):
             'view_mode': 'list,form',
             'domain': [('bike_id', '=', self.id)],
         }
+
+    @api.constrains('hourly_rate', 'daily_rate', 'weekly_rate', 'monthly_rate')
+    def _check_rates(self):
+        """Vérifie que les tarifs ne sont pas négatifs"""
+        for bike in self:
+            if bike.hourly_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif horaire ne peut pas être négatif."
+                )
+            if bike.daily_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif journalier ne peut pas être négatif."
+                )
+            if bike.weekly_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif hebdomadaire ne peut pas être négatif."
+                )
+            if bike.monthly_rate < 0:
+                raise exceptions.ValidationError(
+                    "Le tarif mensuel ne peut pas être négatif."
+                )
 
     _sql_constraints = [
         ('serial_number_unique', 'UNIQUE(serial_number)', 'Le numéro de série doit être unique!')
