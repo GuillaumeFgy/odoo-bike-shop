@@ -96,6 +96,7 @@
         <!-- Contrats de location de démonstration -->
         <record id="demo_rental_1" model="rental.order">
             <field name="partner_id" ref="demo_partner_1"/>
+            <field name="customer_name">Jean Dupont</field>
             <field name="bike_id" ref="demo_bike_6"/>
             <field name="start_date" eval="(datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
             <field name="end_date" eval="(datetime.now() + timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
@@ -106,6 +107,7 @@
 
         <record id="demo_rental_2" model="rental.order">
             <field name="partner_id" ref="demo_partner_2"/>
+            <field name="customer_name">Marie Martin</field>
             <field name="bike_id" ref="demo_bike_2"/>
             <field name="start_date" eval="(datetime.now() + timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S')"/>
             <field name="end_date" eval="(datetime.now() + timedelta(days=9)).strftime('%Y-%m-%d %H:%M:%S')"/>
@@ -115,6 +117,7 @@
 
         <record id="demo_rental_3" model="rental.order">
             <field name="partner_id" ref="demo_partner_3"/>
+            <field name="customer_name">Pierre Durant</field>
             <field name="bike_id" ref="demo_bike_1"/>
             <field name="start_date" eval="(datetime.now() - timedelta(days=10)).strftime('%Y-%m-%d %H:%M:%S')"/>
             <field name="end_date" eval="(datetime.now() - timedelta(days=8)).strftime('%Y-%m-%d %H:%M:%S')"/>

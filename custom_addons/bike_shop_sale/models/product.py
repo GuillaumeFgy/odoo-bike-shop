@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from odoo import models, fields, api
+from odoo import models, fields, api, exceptions
 
 
 class ShopProduct(models.Model):
@@ -21,6 +21,10 @@ class ShopProduct(models.Model):
     quantity = fields.Integer(string='Quantité en stock', default=0)
 
     active = fields.Boolean(string='Actif', default=True)
+    state = fields.Selection([
+        ('draft', 'Brouillon'),
+        ('confirmed', 'Confirmé'),
+    ], string='État', default='draft', required=True)
 
     @api.depends('price', 'cost')
     def _compute_margin(self):
@@ -29,8 +33,37 @@ class ShopProduct(models.Model):
 
     margin = fields.Float(string='Marge (€)', compute='_compute_margin')
 
+    @api.constrains('price')
+    def _check_price(self):
+        """Vérifie que le prix de vente est positif"""
+        for product in self:
+            if product.price < 0:
+                raise exceptions.ValidationError(
+                    "Le prix de vente ne peut pas être négatif."
+                )
+
+    @api.constrains('cost')
+    def _check_cost(self):
+        """Vérifie que le prix d'achat est positif"""
+        for product in self:
+            if product.cost < 0:
+                raise exceptions.ValidationError(
+                    "Le prix d'achat ne peut pas être négatif."
+                )
+
+    @api.constrains('quantity')
+    def _check_quantity(self):
+        """Vérifie que la quantité n'est pas négative"""
+        for product in self:
+            if product.quantity < 0:
+                raise exceptions.ValidationError(
+                    "La quantité en stock ne peut pas être négative."
+                )
+
     def action_confirm_and_return(self):
-        """Sauvegarde le produit et retourne à la liste des produits"""
+        """Confirme le produit et retourne à la liste des produits"""
+        self.ensure_one()
+        self.state = 'confirmed'
         return {
             'type': 'ir.actions.act_window',
             'res_model': 'shop.product',

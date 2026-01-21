@@ -21,7 +21,8 @@
         <field name="arch" type="xml">
             <form string="Produit">
                 <header>
-                    <button name="action_confirm_and_return" string="Confirmer" type="object" class="btn-primary"/>
+                    <button name="action_confirm_and_return" string="Confirmer" type="object" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -77,5 +78,7 @@
         <field name="name">Produits</field>
         <field name="res_model">shop.product</field>
         <field name="view_mode">list,kanban,form</field>
+        <field name="domain">[('state', '=', 'confirmed')]</field>
+        <field name="context">{'default_state': 'draft'}</field>
     </record>
 </odoo>

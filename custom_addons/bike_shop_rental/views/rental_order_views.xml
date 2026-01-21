@@ -12,7 +12,7 @@
                   decoration-warning="state=='ongoing'"
                   decoration-muted="state=='cancelled'">
                 <field name="name"/>
-                <field name="partner_id"/>
+                <field name="customer_name"/>
                 <field name="bike_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
@@ -47,12 +47,13 @@
                     </div>
                     <group>
                         <group string="Client">
-                            <field name="partner_id" widget="res_partner_many2one"/>
-                            <field name="partner_phone" widget="phone"/>
-                            <field name="partner_email" widget="email"/>
+                            <field name="customer_name" placeholder="Nom du client..."/>
+                            <field name="partner_phone" placeholder="+33612345678"/>
+                            <field name="partner_email" placeholder="client@exemple.com"/>
+                            <field name="partner_id" options="{'no_open': True, 'no_create': True}" placeholder="Ou sélectionner un client existant..." invisible="1"/>
                         </group>
                         <group string="Vélo">
-                            <field name="bike_id" domain="[('state', '=', 'available')]" options="{'no_create': True}"/>
+                            <field name="bike_id" domain="[('state', '=', 'available')]" options="{'no_open': True, 'no_create': True}" placeholder="Rechercher un vélo..."/>
                             <field name="bike_category" readonly="1"/>
                         </group>
                     </group>
@@ -86,7 +87,7 @@
             <kanban default_group_by="state" class="o_kanban_mobile" quick_create="false">
                 <field name="id"/>
                 <field name="name"/>
-                <field name="partner_id"/>
+                <field name="customer_name"/>
                 <field name="bike_id"/>
                 <field name="start_date"/>
                 <field name="end_date"/>
@@ -109,7 +110,7 @@
                             <div class="rental-card-body">
                                 <div class="rental-info-row">
                                     <i class="fa fa-user"/>
-                                    <strong><field name="partner_id"/></strong>
+                                    <strong><field name="customer_name"/></strong>
                                 </div>
                                 <div class="rental-info-row">
                                     <i class="fa fa-bicycle"/>
@@ -141,7 +142,7 @@
         <field name="model">rental.order</field>
         <field name="arch" type="xml">
             <calendar string="Planning" date_start="start_date" date_stop="end_date" color="bike_id">
-                <field name="partner_id"/>
+                <field name="customer_name"/>
                 <field name="bike_id"/>
             </calendar>
         </field>

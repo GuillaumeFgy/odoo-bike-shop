@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import re
 from odoo import models, fields, api, exceptions
 
 
@@ -11,7 +12,8 @@ class RentalOrder(models.Model):
     name = fields.Char(string='Numéro', required=True, copy=False, readonly=True, default='Nouveau')
 
     # Client
-    partner_id = fields.Many2one('res.partner', string='Client', required=True)
+    partner_id = fields.Many2one('res.partner', string='Client Existant')
+    customer_name = fields.Char(string='Nom du Client', compute='_compute_customer_name', store=True, readonly=False, required=True)
     partner_phone = fields.Char(string='Téléphone')
     partner_email = fields.Char(string='Email')
 
@@ -53,10 +55,20 @@ class RentalOrder(models.Model):
     # Notes
     notes = fields.Text(string='Notes')
 
+    @api.depends('partner_id')
+    def _compute_customer_name(self):
+        """Calcule le nom du client depuis partner_id s'il existe"""
+        for record in self:
+            if record.partner_id and not record.customer_name:
+                record.customer_name = record.partner_id.name
+            elif not record.customer_name:
+                record.customer_name = ''
+
     @api.onchange('partner_id')
     def _onchange_partner_id(self):
         """Pré-remplit les informations du client"""
         if self.partner_id:
+            self.customer_name = self.partner_id.name
             self.partner_email = self.partner_id.email
             self.partner_phone = self.partner_id.phone
 
@@ -118,6 +130,83 @@ class RentalOrder(models.Model):
                 if record.end_date <= record.start_date:
                     raise exceptions.ValidationError("La date de fin doit être après la date de début.")
 
+    @api.constrains('rental_type', 'start_date', 'end_date')
+    def _check_rental_type_duration(self):
+        """Vérifie que le type de location correspond à la durée"""
+        for record in self:
+            if record.start_date and record.end_date and record.rental_type:
+                duration_days = record.duration_days
+
+                if record.rental_type == 'monthly' and duration_days < 30:
+                    raise exceptions.ValidationError(
+                        "Pour une location mensuelle, la durée doit être d'au moins 30 jours. "
+                        f"Durée actuelle : {duration_days:.1f} jours."
+                    )
+                elif record.rental_type == 'weekly' and duration_days < 7:
+                    raise exceptions.ValidationError(
+                        "Pour une location hebdomadaire, la durée doit être d'au moins 7 jours. "
+                        f"Durée actuelle : {duration_days:.1f} jours."
+                    )
+                elif record.rental_type == 'daily' and duration_days < 1:
+                    raise exceptions.ValidationError(
+                        "Pour une location journalière, la durée doit être d'au moins 1 jour. "
+                        f"Durée actuelle : {duration_days:.1f} jours."
+                    )
+
+    @api.constrains('partner_email')
+    def _check_email(self):
+        """Vérifie le format de l'email"""
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        for record in self:
+            if record.partner_email and not re.match(email_regex, record.partner_email):
+                raise exceptions.ValidationError(
+                    f"L'email '{record.partner_email}' n'est pas valide. "
+                    "Format attendu : exemple@domaine.com"
+                )
+
+    @api.constrains('partner_phone')
+    def _check_phone(self):
+        """Vérifie le format du téléphone"""
+        # Accepte les formats: +33612345678, 0612345678, +33 6 12 34 56 78, etc.
+        phone_regex = r'^(\+\d{1,3}[\s.-]?)?\(?\d{1,4}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,4}[\s.-]?\d{1,9}$'
+        for record in self:
+            if record.partner_phone:
+                # Enlever les espaces pour vérifier qu'il y a assez de chiffres
+                phone_digits = re.sub(r'[^\d]', '', record.partner_phone)
+                if len(phone_digits) < 10:
+                    raise exceptions.ValidationError(
+                        f"Le numéro de téléphone '{record.partner_phone}' n'est pas valide. "
+                        "Il doit contenir au moins 10 chiffres."
+                    )
+                if not re.match(phone_regex, record.partner_phone):
+                    raise exceptions.ValidationError(
+                        f"Le numéro de téléphone '{record.partner_phone}' n'est pas valide. "
+                        "Format attendu : +33612345678 ou 0612345678"
+                    )
+
+    @api.constrains('customer_name')
+    def _check_customer_name(self):
+        """Vérifie que le nom du client n'est pas vide"""
+        for record in self:
+            if not record.customer_name or not record.customer_name.strip():
+                raise exceptions.ValidationError(
+                    "Le nom du client est obligatoire."
+                )
+            if len(record.customer_name.strip()) < 2:
+                raise exceptions.ValidationError(
+                    "Le nom du client doit contenir au moins 2 caractères."
+                )
+
+    @api.constrains('start_date')
+    def _check_start_date(self):
+        """Vérifie que la date de début n'est pas dans le passé pour les nouveaux contrats"""
+        for record in self:
+            # Seulement pour les nouveaux contrats en brouillon
+            if record.state == 'draft' and record.start_date and record.start_date < fields.Datetime.now():
+                raise exceptions.ValidationError(
+                    "La date de début ne peut pas être dans le passé."
+                )
+
     @api.model_create_multi
     def create(self, vals_list):
         """Génère automatiquement le numéro de contrat"""
@@ -130,6 +219,12 @@ class RentalOrder(models.Model):
         """Confirme la location"""
         for rental in self:
             if rental.state == 'draft':
+                # Vérifier que le vélo est toujours disponible
+                if rental.bike_id.state != 'available':
+                    raise exceptions.ValidationError(
+                        f"Le vélo '{rental.bike_id.name}' n'est plus disponible. "
+                        f"État actuel : {dict(rental.bike_id._fields['state'].selection).get(rental.bike_id.state)}"
+                    )
                 rental.state = 'confirmed'
 
     def action_start_rental(self):
