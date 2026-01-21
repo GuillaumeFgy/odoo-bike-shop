@@ -1,0 +1,394 @@
+// =============================================================================
+// BIKE SHOP - Modern UI Theme
+// Palette: Bleu & Orange
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Variables
+// -----------------------------------------------------------------------------
+$bike-primary: #1e40af;
+$bike-primary-light: #3b82f6;
+$bike-primary-bg: #eff6ff;
+$bike-accent: #f97316;
+$bike-accent-light: #fdba74;
+$bike-accent-bg: #fff7ed;
+
+$state-available: #10b981;
+$state-available-bg: #d1fae5;
+$state-rented: #f97316;
+$state-rented-bg: #ffedd5;
+$state-maintenance: #6b7280;
+$state-maintenance-bg: #f3f4f6;
+
+$text-primary: #1f2937;
+$text-secondary: #6b7280;
+$border-color: #e5e7eb;
+$card-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+$card-shadow-hover: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+// -----------------------------------------------------------------------------
+// Kanban Cards - Bikes
+// -----------------------------------------------------------------------------
+.o_kanban_view .bike-kanban-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid $border-color;
+    box-shadow: $card-shadow;
+    transition: all 0.2s ease;
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: $card-shadow-hover;
+        transform: translateY(-2px);
+        border-color: $bike-primary-light;
+    }
+}
+
+.bike-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, $bike-primary-bg 0%, white 100%);
+    border-bottom: 1px solid $border-color;
+}
+
+.bike-category-tag {
+    background: $bike-primary;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bike-state-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+
+    &::before {
+        content: '';
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+    &.state-available {
+        background: $state-available-bg;
+        color: $state-available;
+    }
+
+    &.state-rented {
+        background: $state-rented-bg;
+        color: $state-rented;
+    }
+
+    &.state-maintenance {
+        background: $state-maintenance-bg;
+        color: $state-maintenance;
+    }
+}
+
+.bike-card-body {
+    padding: 16px;
+
+    h4, .bike-name {
+        margin: 0 0 8px 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: $text-primary;
+    }
+
+    .bike-model {
+        color: $text-secondary;
+        font-size: 13px;
+        margin-bottom: 12px;
+    }
+}
+
+.bike-price {
+    display: inline-flex;
+    align-items: baseline;
+    background: $bike-accent-bg;
+    color: $bike-accent;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 700;
+
+    small {
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 2px;
+        opacity: 0.8;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Kanban Cards - Rentals
+// -----------------------------------------------------------------------------
+.rental-kanban-card {
+    background: white;
+    border-radius: 12px;
+    border-left: 4px solid $bike-primary;
+    box-shadow: $card-shadow;
+    transition: all 0.2s ease;
+    overflow: hidden;
+
+    &:hover {
+        box-shadow: $card-shadow-hover;
+    }
+
+    &.state-draft {
+        border-left-color: $text-secondary;
+    }
+
+    &.state-confirmed {
+        border-left-color: $bike-primary;
+    }
+
+    &.state-ongoing {
+        border-left-color: $bike-accent;
+    }
+
+    &.state-done {
+        border-left-color: $state-available;
+    }
+
+    &.state-cancelled {
+        border-left-color: #ef4444;
+    }
+}
+
+.rental-card-header {
+    padding: 12px 16px;
+    border-bottom: 1px solid $border-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .rental-ref {
+        font-weight: 600;
+        color: $bike-primary;
+        font-size: 14px;
+    }
+}
+
+.rental-card-body {
+    padding: 16px;
+
+    .rental-info-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+        font-size: 13px;
+        color: $text-secondary;
+
+        .fa {
+            width: 16px;
+            color: $bike-primary-light;
+        }
+
+        strong {
+            color: $text-primary;
+        }
+    }
+}
+
+.rental-card-footer {
+    padding: 12px 16px;
+    background: $bike-primary-bg;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .rental-dates {
+        font-size: 12px;
+        color: $text-secondary;
+    }
+
+    .rental-amount {
+        font-size: 16px;
+        font-weight: 700;
+        color: $bike-accent;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Form View Enhancements
+// -----------------------------------------------------------------------------
+.o_form_view {
+    .oe_button_box {
+        .oe_stat_button {
+            border-radius: 8px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: $bike-primary-bg;
+            }
+
+            .o_stat_value {
+                color: $bike-primary;
+                font-weight: 700;
+            }
+
+            .o_stat_text {
+                color: $text-secondary;
+            }
+        }
+    }
+}
+
+// Group titles with icons
+.o_group .o_group_header {
+    color: $bike-primary;
+    font-weight: 600;
+    border-bottom: 2px solid $bike-primary-light;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+}
+
+// Notebook tabs styling
+.o_form_view .o_notebook {
+    .nav-tabs {
+        border-bottom: 2px solid $border-color;
+
+        .nav-item .nav-link {
+            border: none;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            color: $text-secondary;
+            font-weight: 500;
+            padding: 12px 20px;
+            transition: all 0.2s ease;
+
+            &:hover {
+                color: $bike-primary;
+                background: $bike-primary-bg;
+            }
+
+            &.active {
+                color: $bike-primary;
+                border-bottom-color: $bike-accent;
+                background: transparent;
+            }
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// List View Enhancements
+// -----------------------------------------------------------------------------
+.o_list_view {
+    .o_data_row:hover {
+        background: $bike-primary-bg !important;
+    }
+
+    // Badge improvements
+    .badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Status Bar Enhancement
+// -----------------------------------------------------------------------------
+.o_form_view .o_statusbar_status {
+    .o_arrow_button {
+        font-weight: 500;
+
+        &.o_arrow_button_current {
+            background: $bike-primary;
+            color: white;
+
+            &::after {
+                border-left-color: $bike-primary;
+            }
+        }
+
+        &.btn-primary {
+            background: $bike-accent;
+            border-color: $bike-accent;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Monetary Fields
+// -----------------------------------------------------------------------------
+.o_field_monetary {
+    font-weight: 600;
+    color: $bike-accent;
+}
+
+// Total amount highlight
+.oe_subtotal_footer_separator {
+    font-size: 18px !important;
+    color: $bike-accent !important;
+    font-weight: 700 !important;
+}
+
+// -----------------------------------------------------------------------------
+// Calendar View Enhancement
+// -----------------------------------------------------------------------------
+.o_calendar_view {
+    .fc-event {
+        border-radius: 6px;
+        border: none;
+        padding: 2px 6px;
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Search Panel
+// -----------------------------------------------------------------------------
+.o_searchview {
+    .o_searchview_facet {
+        background: $bike-primary;
+        border-radius: 20px;
+
+        .o_searchview_facet_label {
+            background: $bike-primary;
+        }
+    }
+}
+
+// -----------------------------------------------------------------------------
+// Action Buttons
+// -----------------------------------------------------------------------------
+.o_form_view {
+    .o_form_statusbar {
+        .btn-primary {
+            background: $bike-accent;
+            border-color: $bike-accent;
+
+            &:hover {
+                background: darken($bike-accent, 10%);
+                border-color: darken($bike-accent, 10%);
+            }
+        }
+
+        .btn-secondary {
+            border-color: $bike-primary-light;
+            color: $bike-primary;
+
+            &:hover {
+                background: $bike-primary-bg;
+            }
+        }
+    }
+}

@@ -23,6 +23,11 @@
     'demo': [
         'data/demo_data.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'bike_shop_rental/static/src/scss/bike_shop.scss',
+        ],
+    },
     'installable': True,
     'application': True,
     'license': 'LGPL-3',

@@ -33,32 +33,38 @@
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
-                    <div class="oe_title">
-                        <h1><field name="name" placeholder="Nom du vélo"/></h1>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_rentals" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="rental_count" widget="statinfo" string="Locations"/>
+                        </button>
                     </div>
-                    <group>
-                        <group string="Informations">
-                            <field name="category_id"/>
-                            <field name="model"/>
-                            <field name="year"/>
-                            <field name="frame_size"/>
-                            <field name="color"/>
-                            <field name="serial_number"/>
-                        </group>
-                        <group string="Tarification">
-                            <field name="hourly_rate"/>
-                            <field name="daily_rate"/>
-                            <field name="weekly_rate"/>
-                            <field name="monthly_rate"/>
-                        </group>
-                    </group>
-                    <group string="Description">
-                        <field name="description" nolabel="1"/>
-                    </group>
-                    <group string="Statistiques" invisible="rental_count == 0">
-                        <field name="rental_count"/>
-                        <button name="action_view_rentals" type="object" string="Voir les locations" class="oe_link"/>
-                    </group>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom du vélo"/></h1>
+                        <field name="category_id" widget="selection" placeholder="Catégorie"/>
+                    </div>
+                    <notebook>
+                        <page string="Informations" name="info">
+                            <group>
+                                <group string="Caractéristiques">
+                                    <field name="model" placeholder="Ex: Trek FX 3"/>
+                                    <field name="year"/>
+                                    <field name="frame_size"/>
+                                    <field name="color"/>
+                                    <field name="serial_number"/>
+                                </group>
+                                <group string="Tarification">
+                                    <field name="hourly_rate" widget="monetary"/>
+                                    <field name="daily_rate" widget="monetary"/>
+                                    <field name="weekly_rate" widget="monetary"/>
+                                    <field name="monthly_rate" widget="monetary"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Description" name="description">
+                            <field name="description" nolabel="1" placeholder="Description détaillée du vélo..."/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -69,19 +75,39 @@
         <field name="name">bike.bike.kanban</field>
         <field name="model">bike.bike</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban class="o_kanban_mobile">
                 <field name="id"/>
                 <field name="name"/>
+                <field name="model"/>
                 <field name="category_id"/>
                 <field name="state"/>
                 <field name="daily_rate"/>
+                <field name="rental_count"/>
                 <templates>
                     <t t-name="card">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div><field name="category_id"/></div>
-                            <div><field name="state" widget="badge"/></div>
-                            <div><field name="daily_rate"/> €/jour</div>
+                        <div class="bike-kanban-card oe_kanban_global_click">
+                            <div class="bike-card-header">
+                                <span class="bike-category-tag"><field name="category_id"/></span>
+                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value}">
+                                    <t t-if="record.state.raw_value == 'available'">Disponible</t>
+                                    <t t-if="record.state.raw_value == 'rented'">Loué</t>
+                                    <t t-if="record.state.raw_value == 'maintenance'">Maintenance</t>
+                                </span>
+                            </div>
+                            <div class="bike-card-body">
+                                <h4 class="bike-name"><field name="name"/></h4>
+                                <div class="bike-model" t-if="record.model.raw_value">
+                                    <i class="fa fa-bicycle me-1"/> <field name="model"/>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="bike-price">
+                                        <field name="daily_rate"/><small>/jour</small>
+                                    </div>
+                                    <span class="text-muted small" t-if="record.rental_count.raw_value > 0">
+                                        <i class="fa fa-history"/> <field name="rental_count"/> locations
+                                    </span>
+                                </div>
+                            </div>
                         </div>
                     </t>
                 </templates>
