@@ -1,7 +1,0 @@
-id,record_type,name,category_id,brand,model,year,frame_size,color,serial_number,state,condition
-demo_bike_1,bike.bike,TREK City 2023 - #001,category_city,TREK,City Commuter,2023,m,Bleu,TREK-CITY-001,available,excellent
-demo_bike_2,bike.bike,SPECIALIZED Mountain X5 - #002,category_mountain,SPECIALIZED,Mountain X5,2024,l,Noir,SPEC-MTB-002,available,new
-demo_bike_3,bike.bike,GIANT Road Pro - #003,category_road,GIANT,Road Pro,2023,m,Rouge,GIANT-ROAD-003,available,excellent
-demo_bike_4,bike.bike,BOSCH E-Bike Urban - #004,category_electric,BOSCH,E-Bike Urban,2024,m,Gris,BOSCH-ELEC-004,available,new
-demo_bike_5,bike.bike,"DECATHLON Kids 20"" - #005",category_kids,DECATHLON,Kids 20 pouces,2023,s,Jaune,DECA-KIDS-005,available,good
-demo_bike_6,bike.bike,TREK Mountain Pro - #006,category_mountain,TREK,Mountain Pro,2022,l,Vert,TREK-MTB-006,rented,good

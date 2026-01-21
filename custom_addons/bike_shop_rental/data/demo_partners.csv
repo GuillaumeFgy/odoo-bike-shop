@@ -1,4 +1,0 @@
-id,model,name,street,city,zip,country_id,phone,email
-demo_partner_1,res.partner,Jean Dupont,123 Rue de la République,Paris,75001,base.fr,+33 1 23 45 67 89,jean.dupont@example.com
-demo_partner_2,res.partner,Marie Martin,456 Avenue des Champs,Lyon,69001,base.fr,+33 4 12 34 56 78,marie.martin@example.com
-demo_partner_3,res.partner,Pierre Durant,789 Boulevard du Midi,Marseille,13001,base.fr,+33 4 98 76 54 32,pierre.durant@example.com

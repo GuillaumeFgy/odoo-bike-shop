@@ -1,4 +1,0 @@
-id,model,partner_id,bike_id,start_date,end_date,rental_type,state,deposit_amount,notes,actual_return_date
-demo_rental_1,rental.order,demo_partner_1,demo_bike_6,(datetime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S'),(datetime.now() + timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S'),daily,ongoing,150.0,"Client régulier, location pour une semaine de randonnée",
-demo_rental_2,rental.order,demo_partner_2,demo_bike_2,(datetime.now() + timedelta(days=7)).strftime('%Y-%m-%d %H:%M:%S'),(datetime.now() + timedelta(days=9)).strftime('%Y-%m-%d %H:%M:%S'),daily,confirmed,150.0,,
-demo_rental_3,rental.order,demo_partner_3,demo_bike_1,(datetime.now() - timedelta(days=10)).strftime('%Y-%m-%d %H:%M:%S'),(datetime.now() - timedelta(days=8)).strftime('%Y-%m-%d %H:%M:%S'),daily,done,100.0,,(datetime.now() - timedelta(days=8)).strftime('%Y-%m-%d %H:%M:%S')
