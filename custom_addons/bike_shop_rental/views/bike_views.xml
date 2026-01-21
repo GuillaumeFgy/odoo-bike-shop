@@ -33,7 +33,6 @@
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
-                    <field name="image" widget="image" class="oe_avatar"/>
                     <div class="oe_title">
                         <h1><field name="name" placeholder="Nom du vélo"/></h1>
                     </div>
@@ -76,11 +75,9 @@
                 <field name="category_id"/>
                 <field name="state"/>
                 <field name="daily_rate"/>
-                <field name="image"/>
                 <templates>
                     <t t-name="card">
                         <div class="oe_kanban_global_click">
-                            <field name="image" widget="image" class="o_image_64_contain"/>
                             <strong><field name="name"/></strong>
                             <div><field name="category_id"/></div>
                             <div><field name="state" widget="badge"/></div>
