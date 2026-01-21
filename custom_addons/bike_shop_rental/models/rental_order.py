@@ -50,9 +50,6 @@ class RentalOrder(models.Model):
         ('cancelled', 'Annulé'),
     ], string='État', default='draft', required=True)
 
-    # Facturation
-    invoice_id = fields.Many2one('account.move', string='Facture', readonly=True, copy=False)
-
     # Notes
     notes = fields.Text(string='Notes')
 
@@ -155,31 +152,3 @@ class RentalOrder(models.Model):
         for rental in self:
             if rental.state in ['draft', 'confirmed']:
                 rental.state = 'cancelled'
-
-    def action_create_invoice(self):
-        """Crée une facture client"""
-        self.ensure_one()
-        if self.state != 'done':
-            raise exceptions.UserError("Terminez d'abord la location avant de facturer.")
-        if self.invoice_id:
-            raise exceptions.UserError("Une facture existe déjà pour cette location.")
-
-        invoice = self.env['account.move'].create({
-            'move_type': 'out_invoice',
-            'partner_id': self.partner_id.id,
-            'invoice_date': fields.Date.today(),
-            'invoice_line_ids': [(0, 0, {
-                'name': 'Location %s - %s' % (self.bike_id.name, self.name),
-                'quantity': 1,
-                'price_unit': self.total_amount,
-            })],
-        })
-        self.invoice_id = invoice.id
-
-        return {
-            'type': 'ir.actions.act_window',
-            'name': 'Facture',
-            'res_model': 'account.move',
-            'res_id': invoice.id,
-            'view_mode': 'form',
-        }
