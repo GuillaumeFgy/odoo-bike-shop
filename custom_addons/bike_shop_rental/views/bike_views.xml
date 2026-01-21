@@ -43,28 +43,21 @@
                         <h1><field name="name" placeholder="Nom du vélo"/></h1>
                         <field name="category_id" widget="selection" placeholder="Catégorie"/>
                     </div>
-                    <notebook>
-                        <page string="Informations" name="info">
-                            <group>
-                                <group string="Caractéristiques">
-                                    <field name="model" placeholder="Ex: Trek FX 3"/>
-                                    <field name="year"/>
-                                    <field name="frame_size"/>
-                                    <field name="color"/>
-                                    <field name="serial_number"/>
-                                </group>
-                                <group string="Tarification">
-                                    <field name="hourly_rate" widget="monetary"/>
-                                    <field name="daily_rate" widget="monetary"/>
-                                    <field name="weekly_rate" widget="monetary"/>
-                                    <field name="monthly_rate" widget="monetary"/>
-                                </group>
-                            </group>
-                        </page>
-                        <page string="Description" name="description">
-                            <field name="description" nolabel="1" placeholder="Description détaillée du vélo..."/>
-                        </page>
-                    </notebook>
+                    <group>
+                        <group string="Caractéristiques">
+                            <field name="model" placeholder="Ex: Trek FX 3"/>
+                            <field name="year"/>
+                            <field name="frame_size"/>
+                            <field name="color"/>
+                            <field name="serial_number"/>
+                        </group>
+                        <group string="Tarification">
+                            <field name="hourly_rate" widget="monetary"/>
+                            <field name="daily_rate" widget="monetary"/>
+                            <field name="weekly_rate" widget="monetary"/>
+                            <field name="monthly_rate" widget="monetary"/>
+                        </group>
+                    </group>
                 </sheet>
             </form>
         </field>
@@ -161,7 +154,6 @@
                         </group>
                     </group>
                     <group>
-                        <field name="description"/>
                         <field name="bike_count" readonly="1"/>
                     </group>
                 </sheet>

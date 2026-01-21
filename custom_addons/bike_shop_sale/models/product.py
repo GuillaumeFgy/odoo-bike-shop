@@ -28,3 +28,12 @@ class ShopProduct(models.Model):
             product.margin = product.price - product.cost
 
     margin = fields.Float(string='Marge (€)', compute='_compute_margin')
+
+    def action_confirm_and_return(self):
+        """Sauvegarde le produit et retourne à la liste des produits"""
+        return {
+            'type': 'ir.actions.act_window',
+            'res_model': 'shop.product',
+            'view_mode': 'list,kanban,form',
+            'target': 'current',
+        }

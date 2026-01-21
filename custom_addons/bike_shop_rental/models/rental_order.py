@@ -43,11 +43,11 @@ class RentalOrder(models.Model):
 
     # État
     state = fields.Selection([
-        ('draft', 'Brouillon'),
-        ('confirmed', 'Confirmé'),
-        ('ongoing', 'En Cours'),
-        ('done', 'Terminé'),
         ('cancelled', 'Annulé'),
+        ('ongoing', 'En Cours'),
+        ('confirmed', 'Confirmé'),
+        ('done', 'Terminé'),
+        ('draft', 'Brouillon'),
     ], string='État', default='draft', required=True)
 
     # Notes

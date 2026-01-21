@@ -20,6 +20,9 @@
         <field name="model">shop.product</field>
         <field name="arch" type="xml">
             <form string="Produit">
+                <header>
+                    <button name="action_confirm_and_return" string="Confirmer" type="object" class="btn-primary"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <label for="name"/>
@@ -28,7 +31,6 @@
                     <group>
                         <group string="Informations">
                             <field name="product_type"/>
-                            <field name="description" placeholder="Description..."/>
                         </group>
                         <group string="Prix et Stock">
                             <field name="price"/>

@@ -64,8 +64,6 @@
                     <group class="oe_subtotal_footer">
                         <field name="total" class="oe_subtotal_footer_separator"/>
                     </group>
-
-                    <field name="notes" placeholder="Notes..."/>
                 </sheet>
             </form>
         </field>

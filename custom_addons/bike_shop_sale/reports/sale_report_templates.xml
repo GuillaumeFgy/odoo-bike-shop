@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Extension du rapport de vente pour afficher les infos vélos -->
+    <template id="report_saleorder_document_inherit" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//table[@name='sales_order_lines']/thead/tr/th[@name='th_description']" position="after">
+            <th name="th_bike_category" class="text-left" invisible="not line.is_bike">Catégorie</th>
+        </xpath>
+        <xpath expr="//table[@name='sales_order_lines']/tbody/t[@t-foreach]/tr/t[@t-if]/td[@name='td_name']" position="after">
+            <td name="td_bike_category" t-if="line.is_bike">
+                <span t-field="line.bike_category"/>
+            </td>
+        </xpath>
+    </template>
+</odoo>
