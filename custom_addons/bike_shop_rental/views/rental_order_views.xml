@@ -148,11 +148,44 @@
         </field>
     </record>
 
+    <!-- Vue Graphique -->
+    <record id="view_rental_order_graph" model="ir.ui.view">
+        <field name="name">rental.order.graph</field>
+        <field name="model">rental.order</field>
+        <field name="arch" type="xml">
+            <graph string="Analyse des Locations" type="bar">
+                <field name="start_date" interval="month"/>
+                <field name="total_amount" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vue Pivot -->
+    <record id="view_rental_order_pivot" model="ir.ui.view">
+        <field name="name">rental.order.pivot</field>
+        <field name="model">rental.order</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des Locations">
+                <field name="start_date" interval="month" type="row"/>
+                <field name="rental_type" type="col"/>
+                <field name="total_amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <!-- Action contrats -->
     <record id="action_rental_order" model="ir.actions.act_window">
         <field name="name">Contrats de Location</field>
         <field name="res_model">rental.order</field>
         <field name="view_mode">kanban,list,form,calendar</field>
+    </record>
+
+    <!-- Action rapports -->
+    <record id="action_rental_order_report" model="ir.actions.act_window">
+        <field name="name">Rapports de Location</field>
+        <field name="res_model">rental.order</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state', '!=', 'cancelled')]</field>
     </record>
 
     <!-- Séquence numéros de contrat -->

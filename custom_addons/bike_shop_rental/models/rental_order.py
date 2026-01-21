@@ -199,6 +199,12 @@ class RentalOrder(models.Model):
                     raise exceptions.ValidationError(
                         "Le nom du client doit contenir au moins 2 caractères."
                     )
+                # Vérifier que le nom ne contient pas de chiffres
+                if any(char.isdigit() for char in record.customer_name):
+                    raise exceptions.ValidationError(
+                        f"Le nom du client '{record.customer_name}' n'est pas valide. "
+                        "Le nom ne peut pas contenir de chiffres."
+                    )
 
     @api.constrains('bike_id', 'state')
     def _check_bike_id(self):

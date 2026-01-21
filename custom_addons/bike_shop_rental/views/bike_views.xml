@@ -52,7 +52,7 @@
                             <field name="year"/>
                             <field name="frame_size"/>
                             <field name="color"/>
-                            <field name="serial_number"/>
+                            <field name="serial_number" readonly="1"/>
                         </group>
                         <group string="Tarification">
                             <field name="hourly_rate" widget="monetary"/>
@@ -125,15 +125,72 @@
         <field name="name">bike.category.tree</field>
         <field name="model">bike.category</field>
         <field name="arch" type="xml">
-            <list string="Catégories">
-                <field name="sequence" widget="handle"/>
+            <list string="Catégories" decoration-success="active==True" decoration-muted="active==False">
+                <field name="name"/>
+                <field name="hourly_rate" widget="monetary"/>
+                <field name="daily_rate" widget="monetary"/>
+                <field name="weekly_rate" widget="monetary"/>
+                <field name="monthly_rate" widget="monetary"/>
+                <field name="bike_count"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Kanban des catégories -->
+    <record id="view_bike_category_kanban" model="ir.ui.view">
+        <field name="name">bike.category.kanban</field>
+        <field name="model">bike.category</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" quick_create="false">
+                <field name="id"/>
                 <field name="name"/>
                 <field name="hourly_rate"/>
                 <field name="daily_rate"/>
                 <field name="weekly_rate"/>
                 <field name="monthly_rate"/>
                 <field name="bike_count"/>
-            </list>
+                <field name="active"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="rental-kanban-card state-#{record.active.raw_value ? 'available' : 'maintenance'} oe_kanban_global_click">
+                            <div class="rental-card-header">
+                                <span class="rental-ref"><field name="name"/></span>
+                                <span t-attf-class="bike-state-badge state-#{record.active.raw_value ? 'available' : 'maintenance'}">
+                                    <t t-if="record.active.raw_value">Actif</t>
+                                    <t t-if="!record.active.raw_value">Inactif</t>
+                                </span>
+                            </div>
+                            <div class="rental-card-body">
+                                <div class="rental-info-row">
+                                    <i class="fa fa-clock-o"/>
+                                    <strong>Horaire:</strong> <field name="hourly_rate"/> €
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-calendar-day"/>
+                                    <strong>Journalier:</strong> <field name="daily_rate"/> €
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-calendar-week"/>
+                                    <strong>Hebdo:</strong> <field name="weekly_rate"/> €
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-calendar"/>
+                                    <strong>Mensuel:</strong> <field name="monthly_rate"/> €
+                                </div>
+                            </div>
+                            <div class="rental-card-footer">
+                                <div class="rental-dates">
+                                    <i class="fa fa-bicycle"/> <field name="bike_count"/> vélo(s)
+                                </div>
+                                <div class="rental-amount">
+                                    <i class="fa fa-tags"/> Catégorie
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -144,23 +201,31 @@
         <field name="arch" type="xml">
             <form string="Catégorie">
                 <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom de la catégorie..."/></h1>
+                    </div>
                     <group>
-                        <field name="name"/>
-                        <field name="sequence"/>
+                        <group>
+                            <field name="active" widget="boolean_toggle"/>
+                            <field name="bike_count" readonly="1"/>
+                        </group>
                     </group>
                     <group string="Tarification par défaut">
                         <group>
-                            <field name="hourly_rate"/>
-                            <field name="daily_rate"/>
+                            <field name="hourly_rate" widget="monetary"/>
+                            <field name="daily_rate" widget="monetary"/>
                         </group>
                         <group>
-                            <field name="weekly_rate"/>
-                            <field name="monthly_rate"/>
+                            <field name="weekly_rate" widget="monetary"/>
+                            <field name="monthly_rate" widget="monetary"/>
                         </group>
                     </group>
-                    <group>
-                        <field name="bike_count" readonly="1"/>
-                    </group>
+                    <notebook>
+                        <page string="Description">
+                            <field name="description" placeholder="Description de la catégorie..."/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -170,6 +235,14 @@
     <record id="action_bike_category" model="ir.actions.act_window">
         <field name="name">Catégories de Vélos</field>
         <field name="res_model">bike.category</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+
+    <!-- Séquence numéros de série -->
+    <record id="seq_bike_serial" model="ir.sequence">
+        <field name="name">Numéro de Série Vélo</field>
+        <field name="code">bike.bike.serial</field>
+        <field name="prefix">SN</field>
+        <field name="padding">6</field>
     </record>
 </odoo>

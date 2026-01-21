@@ -5,11 +5,17 @@
         <field name="name">shop.product.tree</field>
         <field name="model">shop.product</field>
         <field name="arch" type="xml">
-            <list string="Produits">
+            <list string="Produits"
+                  decoration-info="state=='draft'"
+                  decoration-success="state=='confirmed'"
+                  decoration-danger="quantity &lt; 5">
                 <field name="name"/>
                 <field name="product_type"/>
-                <field name="price"/>
+                <field name="price" widget="monetary"/>
+                <field name="cost" widget="monetary"/>
+                <field name="margin" widget="percentage"/>
                 <field name="quantity"/>
+                <field name="state" widget="badge"/>
             </list>
         </field>
     </record>
@@ -27,16 +33,16 @@
                 <sheet>
                     <div class="oe_title">
                         <label for="name"/>
-                        <h1><field name="name" placeholder="Nom du produit"/></h1>
+                        <h1><field name="name" placeholder="Nom du produit..."/></h1>
                     </div>
                     <group>
                         <group string="Informations">
-                            <field name="product_type"/>
+                            <field name="product_type" widget="selection"/>
                         </group>
                         <group string="Prix et Stock">
-                            <field name="price"/>
-                            <field name="cost"/>
-                            <field name="margin"/>
+                            <field name="price" widget="monetary"/>
+                            <field name="cost" widget="monetary"/>
+                            <field name="margin" widget="percentage" readonly="1"/>
                             <field name="quantity"/>
                         </group>
                     </group>
@@ -50,21 +56,40 @@
         <field name="name">shop.product.kanban</field>
         <field name="model">shop.product</field>
         <field name="arch" type="xml">
-            <kanban>
+            <kanban class="o_kanban_mobile" quick_create="false">
+                <field name="id"/>
                 <field name="name"/>
                 <field name="product_type"/>
                 <field name="price"/>
                 <field name="quantity"/>
+                <field name="state"/>
                 <templates>
                     <t t-name="card">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div><field name="product_type"/></div>
-                            <div class="mt-2">
-                                <strong><field name="price"/> €</strong>
+                        <div t-attf-class="rental-kanban-card state-#{record.state.raw_value} oe_kanban_global_click">
+                            <div class="rental-card-header">
+                                <span class="rental-ref"><field name="name"/></span>
+                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'confirmed' and 'available' or 'maintenance'}">
+                                    <t t-if="record.state.raw_value == 'draft'">Brouillon</t>
+                                    <t t-if="record.state.raw_value == 'confirmed'">Confirmé</t>
+                                </span>
                             </div>
-                            <div class="text-muted">
-                                Stock: <field name="quantity"/>
+                            <div class="rental-card-body">
+                                <div class="rental-info-row">
+                                    <i class="fa fa-tag"/>
+                                    <field name="product_type"/>
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-cube"/>
+                                    Stock: <strong><field name="quantity"/></strong>
+                                </div>
+                            </div>
+                            <div class="rental-card-footer">
+                                <div class="rental-dates">
+                                    <i class="fa fa-box"/> Produit
+                                </div>
+                                <div class="rental-amount">
+                                    <strong><field name="price"/> €</strong>
+                                </div>
                             </div>
                         </div>
                     </t>
@@ -77,7 +102,7 @@
     <record id="action_shop_product" model="ir.actions.act_window">
         <field name="name">Produits</field>
         <field name="res_model">shop.product</field>
-        <field name="view_mode">list,kanban,form</field>
+        <field name="view_mode">kanban,list,form</field>
         <field name="domain">[('state', '=', 'confirmed')]</field>
         <field name="context">{'default_state': 'draft'}</field>
     </record>

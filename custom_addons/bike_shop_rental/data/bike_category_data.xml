@@ -4,7 +4,6 @@
         <!-- Catégories de vélos -->
         <record id="category_city" model="bike.category">
             <field name="name">Vélo de Ville</field>
-            <field name="sequence">10</field>
             <field name="hourly_rate">3.0</field>
             <field name="daily_rate">15.0</field>
             <field name="weekly_rate">70.0</field>
@@ -14,7 +13,6 @@
 
         <record id="category_mountain" model="bike.category">
             <field name="name">VTT</field>
-            <field name="sequence">20</field>
             <field name="hourly_rate">5.0</field>
             <field name="daily_rate">25.0</field>
             <field name="weekly_rate">120.0</field>
@@ -24,7 +22,6 @@
 
         <record id="category_road" model="bike.category">
             <field name="name">Vélo de Route</field>
-            <field name="sequence">30</field>
             <field name="hourly_rate">6.0</field>
             <field name="daily_rate">30.0</field>
             <field name="weekly_rate">140.0</field>
@@ -34,7 +31,6 @@
 
         <record id="category_electric" model="bike.category">
             <field name="name">Vélo Électrique</field>
-            <field name="sequence">40</field>
             <field name="hourly_rate">8.0</field>
             <field name="daily_rate">40.0</field>
             <field name="weekly_rate">200.0</field>
@@ -44,7 +40,6 @@
 
         <record id="category_kids" model="bike.category">
             <field name="name">Vélo Enfant</field>
-            <field name="sequence">50</field>
             <field name="hourly_rate">2.0</field>
             <field name="daily_rate">10.0</field>
             <field name="weekly_rate">50.0</field>

@@ -6,10 +6,9 @@ class BikeCategory(models.Model):
     """Catégorie de vélos (VTT, Route, Électrique, etc.)"""
     _name = 'bike.category'
     _description = 'Catégorie de Vélo'
-    _order = 'sequence, name'
+    _order = 'name'
 
     name = fields.Char(string='Nom', required=True, translate=True)
-    sequence = fields.Integer(string='Séquence', default=10)
     description = fields.Text(string='Description')
     active = fields.Boolean(string='Actif', default=True)
 
@@ -33,6 +32,16 @@ class BikeCategory(models.Model):
             category.bike_count = self.env['bike.bike'].search_count([
                 ('category_id', '=', category.id)
             ])
+
+    @api.constrains('name')
+    def _check_name(self):
+        """Vérifie que le nom ne contient pas de chiffres"""
+        for category in self:
+            if category.name and any(char.isdigit() for char in category.name):
+                raise exceptions.ValidationError(
+                    f"Le nom de la catégorie '{category.name}' n'est pas valide. "
+                    "Le nom ne peut pas contenir de chiffres."
+                )
 
     @api.constrains('hourly_rate', 'daily_rate', 'weekly_rate', 'monthly_rate')
     def _check_rates(self):

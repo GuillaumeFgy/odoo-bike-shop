@@ -17,4 +17,11 @@
               parent="menu_bike_shop_sale"
               action="action_shop_product"
               sequence="20"/>
+
+    <!-- Rapports -->
+    <menuitem id="menu_sale_reports"
+              name="Ventes"
+              parent="bike_shop_rental.menu_bike_shop_reports"
+              action="action_shop_order_report"
+              sequence="30"/>
 </odoo>

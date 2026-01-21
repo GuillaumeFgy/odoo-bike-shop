@@ -31,7 +31,31 @@
         <field name="name">rental.report.tree</field>
         <field name="model">rental.report</field>
         <field name="arch" type="xml">
-            <list string="Rapport de Locations">
+            <list string="Rapport de Locations"
+                  decoration-info="state=='draft'"
+                  decoration-primary="state=='confirmed'"
+                  decoration-success="state=='done'"
+                  decoration-warning="state=='ongoing'"
+                  decoration-muted="state=='cancelled'">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="bike_id"/>
+                <field name="bike_category_id"/>
+                <field name="start_date"/>
+                <field name="rental_type"/>
+                <field name="duration_days" widget="float"/>
+                <field name="total_amount" sum="Total" widget="monetary"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Kanban pour l'analyse des locations -->
+    <record id="view_rental_report_kanban" model="ir.ui.view">
+        <field name="name">rental.report.kanban</field>
+        <field name="model">rental.report</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" quick_create="false">
                 <field name="name"/>
                 <field name="partner_id"/>
                 <field name="bike_id"/>
@@ -39,9 +63,51 @@
                 <field name="start_date"/>
                 <field name="rental_type"/>
                 <field name="duration_days"/>
-                <field name="total_amount" sum="Total"/>
+                <field name="total_amount"/>
                 <field name="state"/>
-            </list>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="rental-kanban-card state-#{record.state.raw_value} oe_kanban_global_click">
+                            <div class="rental-card-header">
+                                <span class="rental-ref"><field name="name"/></span>
+                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'available' and 'available' or record.state.raw_value == 'done' and 'available' or record.state.raw_value == 'ongoing' and 'rented' or 'maintenance'}">
+                                    <t t-if="record.state.raw_value == 'draft'">Brouillon</t>
+                                    <t t-if="record.state.raw_value == 'confirmed'">Confirmé</t>
+                                    <t t-if="record.state.raw_value == 'ongoing'">En cours</t>
+                                    <t t-if="record.state.raw_value == 'done'">Terminé</t>
+                                    <t t-if="record.state.raw_value == 'cancelled'">Annulé</t>
+                                </span>
+                            </div>
+                            <div class="rental-card-body">
+                                <div class="rental-info-row">
+                                    <i class="fa fa-user"/>
+                                    <strong><field name="partner_id"/></strong>
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-bicycle"/>
+                                    <field name="bike_id"/>
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-tag"/>
+                                    <field name="rental_type"/>
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-clock-o"/>
+                                    <field name="duration_days"/> jour(s)
+                                </div>
+                            </div>
+                            <div class="rental-card-footer">
+                                <div class="rental-dates">
+                                    <i class="fa fa-calendar"/> <field name="start_date"/>
+                                </div>
+                                <div class="rental-amount">
+                                    <strong><field name="total_amount"/> €</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -49,7 +115,7 @@
     <record id="action_rental_report" model="ir.actions.act_window">
         <field name="name">Analyse des Locations</field>
         <field name="res_model">rental.report</field>
-        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_mode">kanban,graph,pivot,list</field>
         <field name="context">{}</field>
     </record>
 
@@ -58,14 +124,74 @@
         <field name="name">bike.occupancy.report.tree</field>
         <field name="model">bike.occupancy.report</field>
         <field name="arch" type="xml">
-            <list string="Taux d'Occupation des Vélos" default_order="total_revenue desc">
+            <list string="Taux d'Occupation des Vélos"
+                  default_order="total_revenue desc"
+                  decoration-success="total_rentals &gt;= 10"
+                  decoration-info="total_rentals &gt;= 5 and total_rentals &lt; 10"
+                  decoration-muted="total_rentals &lt; 5">
                 <field name="bike_id"/>
                 <field name="bike_category_id"/>
                 <field name="total_rentals" sum="Total Locations"/>
-                <field name="total_days_rented" sum="Total Jours"/>
-                <field name="total_revenue" sum="Total Revenus"/>
-                <field name="avg_rental_duration" avg="Moyenne"/>
+                <field name="total_days_rented" sum="Total Jours" widget="float"/>
+                <field name="total_revenue" sum="Total Revenus" widget="monetary"/>
+                <field name="avg_rental_duration" avg="Moyenne" widget="float"/>
             </list>
+        </field>
+    </record>
+
+    <!-- Vue Kanban pour le rapport d'occupation -->
+    <record id="view_bike_occupancy_report_kanban" model="ir.ui.view">
+        <field name="name">bike.occupancy.report.kanban</field>
+        <field name="model">bike.occupancy.report</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile" quick_create="false">
+                <field name="bike_id"/>
+                <field name="bike_category_id"/>
+                <field name="total_rentals"/>
+                <field name="total_days_rented"/>
+                <field name="total_revenue"/>
+                <field name="avg_rental_duration"/>
+                <templates>
+                    <t t-name="card">
+                        <div t-attf-class="rental-kanban-card state-#{record.total_rentals.raw_value >= 10 ? 'available' : record.total_rentals.raw_value >= 5 ? 'rented' : 'maintenance'} oe_kanban_global_click">
+                            <div class="rental-card-header">
+                                <span class="rental-ref"><field name="bike_id"/></span>
+                                <span t-attf-class="bike-state-badge state-#{record.total_rentals.raw_value >= 10 ? 'available' : record.total_rentals.raw_value >= 5 ? 'rented' : 'maintenance'}">
+                                    <t t-if="record.total_rentals.raw_value >= 10">Très loué</t>
+                                    <t t-if="record.total_rentals.raw_value >= 5 and record.total_rentals.raw_value &lt; 10">Moyennement loué</t>
+                                    <t t-if="record.total_rentals.raw_value &lt; 5">Peu loué</t>
+                                </span>
+                            </div>
+                            <div class="rental-card-body">
+                                <div class="rental-info-row">
+                                    <i class="fa fa-tags"/>
+                                    <field name="bike_category_id"/>
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-refresh"/>
+                                    <strong><field name="total_rentals"/></strong> location(s)
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-calendar"/>
+                                    <strong><field name="total_days_rented"/></strong> jour(s) loué(s)
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-clock-o"/>
+                                    Durée moy: <strong><field name="avg_rental_duration"/></strong> j
+                                </div>
+                            </div>
+                            <div class="rental-card-footer">
+                                <div class="rental-dates">
+                                    <i class="fa fa-bicycle"/> Occupation
+                                </div>
+                                <div class="rental-amount">
+                                    <strong><field name="total_revenue"/> €</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
         </field>
     </record>
 
@@ -81,11 +207,26 @@
         </field>
     </record>
 
+    <!-- Vue Pivot pour le rapport d'occupation -->
+    <record id="view_bike_occupancy_report_pivot" model="ir.ui.view">
+        <field name="name">bike.occupancy.report.pivot</field>
+        <field name="model">bike.occupancy.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse d'Occupation">
+                <field name="bike_category_id" type="row"/>
+                <field name="total_rentals" type="measure"/>
+                <field name="total_days_rented" type="measure"/>
+                <field name="total_revenue" type="measure"/>
+                <field name="avg_rental_duration" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <!-- Action pour le rapport d'occupation -->
     <record id="action_bike_occupancy_report" model="ir.actions.act_window">
         <field name="name">Taux d'Occupation des Vélos</field>
         <field name="res_model">bike.occupancy.report</field>
-        <field name="view_mode">list,graph</field>
+        <field name="view_mode">kanban,graph,pivot,list</field>
     </record>
 
     <!-- Menus pour les rapports -->
@@ -93,6 +234,12 @@
               name="Rapports"
               parent="bike_shop_rental.menu_bike_shop_root"
               sequence="80"/>
+
+    <menuitem id="menu_rental_order_report"
+              name="Locations"
+              parent="menu_bike_shop_reports"
+              action="bike_shop_rental.action_rental_order_report"
+              sequence="5"/>
 
     <menuitem id="menu_rental_report"
               name="Analyse des Locations"

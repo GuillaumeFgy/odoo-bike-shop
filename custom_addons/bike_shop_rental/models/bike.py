@@ -100,6 +100,14 @@ class Bike(models.Model):
             'domain': [('bike_id', '=', self.id)],
         }
 
+    @api.model_create_multi
+    def create(self, vals_list):
+        """Génère automatiquement le numéro de série"""
+        for vals in vals_list:
+            if not vals.get('serial_number'):
+                vals['serial_number'] = self.env['ir.sequence'].next_by_code('bike.bike.serial') or 'SN000001'
+        return super().create(vals_list)
+
     @api.constrains('hourly_rate', 'daily_rate', 'weekly_rate', 'monthly_rate')
     def _check_rates(self):
         """Vérifie que les tarifs ne sont pas négatifs"""

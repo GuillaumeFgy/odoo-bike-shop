@@ -39,31 +39,37 @@
                 <sheet>
                     <div class="oe_title">
                         <label for="name"/>
-                        <h1><field name="name" readonly="1"/></h1>
+                        <h1><field name="name" readonly="1" placeholder="Nouveau"/></h1>
                     </div>
                     <group>
                         <group string="Client">
-                            <field name="customer_name" placeholder="Nom du client"/>
-                            <field name="customer_phone" placeholder="+33 6 12 34 56 78"/>
-                            <field name="customer_email" placeholder="email@exemple.com"/>
+                            <field name="customer_name" placeholder="Nom du client..."/>
+                            <field name="customer_phone" placeholder="+33612345678"/>
+                            <field name="customer_email" placeholder="client@exemple.com"/>
                         </group>
                         <group string="Commande">
                             <field name="date"/>
                         </group>
                     </group>
 
-                    <field name="line_ids">
-                        <list string="Lignes de commande" editable="bottom">
-                            <field name="product_id" domain="[('state', '=', 'confirmed')]"/>
-                            <field name="quantity"/>
-                            <field name="unit_price"/>
-                            <field name="subtotal"/>
-                        </list>
-                    </field>
-
-                    <group class="oe_subtotal_footer">
-                        <field name="total" class="oe_subtotal_footer_separator"/>
-                    </group>
+                    <notebook>
+                        <page string="Produits">
+                            <field name="line_ids">
+                                <list string="Lignes de commande" editable="bottom">
+                                    <field name="product_id" domain="[('state', '=', 'confirmed')]" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="quantity"/>
+                                    <field name="unit_price" widget="monetary"/>
+                                    <field name="subtotal" widget="monetary"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="total" widget="monetary" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Notes additionnelles..."/>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -74,7 +80,8 @@
         <field name="name">shop.order.kanban</field>
         <field name="model">shop.order</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="state">
+            <kanban default_group_by="state" class="o_kanban_mobile" quick_create="false">
+                <field name="id"/>
                 <field name="name"/>
                 <field name="customer_name"/>
                 <field name="date"/>
@@ -82,12 +89,33 @@
                 <field name="state"/>
                 <templates>
                     <t t-name="card">
-                        <div class="oe_kanban_global_click">
-                            <strong><field name="name"/></strong>
-                            <div><field name="customer_name"/></div>
-                            <div class="text-muted"><field name="date"/></div>
-                            <div class="mt-2">
-                                <strong><field name="total"/> €</strong>
+                        <div t-attf-class="rental-kanban-card state-#{record.state.raw_value} oe_kanban_global_click">
+                            <div class="rental-card-header">
+                                <span class="rental-ref"><field name="name"/></span>
+                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'done' and 'available' or record.state.raw_value == 'confirmed' and 'rented' or 'maintenance'}">
+                                    <t t-if="record.state.raw_value == 'draft'">Brouillon</t>
+                                    <t t-if="record.state.raw_value == 'confirmed'">Confirmé</t>
+                                    <t t-if="record.state.raw_value == 'done'">Terminé</t>
+                                    <t t-if="record.state.raw_value == 'cancelled'">Annulé</t>
+                                </span>
+                            </div>
+                            <div class="rental-card-body">
+                                <div class="rental-info-row">
+                                    <i class="fa fa-user"/>
+                                    <strong><field name="customer_name"/></strong>
+                                </div>
+                                <div class="rental-info-row">
+                                    <i class="fa fa-calendar"/>
+                                    <field name="date"/>
+                                </div>
+                            </div>
+                            <div class="rental-card-footer">
+                                <div class="rental-dates">
+                                    <i class="fa fa-shopping-cart"/> Commande
+                                </div>
+                                <div class="rental-amount">
+                                    <strong><field name="total"/> €</strong>
+                                </div>
                             </div>
                         </div>
                     </t>
@@ -96,11 +124,56 @@
         </field>
     </record>
 
+    <!-- Vue Calendrier -->
+    <record id="view_shop_order_calendar" model="ir.ui.view">
+        <field name="name">shop.order.calendar</field>
+        <field name="model">shop.order</field>
+        <field name="arch" type="xml">
+            <calendar string="Calendrier des Commandes" date_start="date" color="state">
+                <field name="customer_name"/>
+                <field name="total"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Vue Graphique -->
+    <record id="view_shop_order_graph" model="ir.ui.view">
+        <field name="name">shop.order.graph</field>
+        <field name="model">shop.order</field>
+        <field name="arch" type="xml">
+            <graph string="Analyse des Ventes" type="bar">
+                <field name="date" interval="month"/>
+                <field name="total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vue Pivot -->
+    <record id="view_shop_order_pivot" model="ir.ui.view">
+        <field name="name">shop.order.pivot</field>
+        <field name="model">shop.order</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des Ventes">
+                <field name="date" interval="month" type="row"/>
+                <field name="state" type="col"/>
+                <field name="total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
     <!-- Action commandes -->
     <record id="action_shop_order" model="ir.actions.act_window">
         <field name="name">Commandes</field>
         <field name="res_model">shop.order</field>
-        <field name="view_mode">list,kanban,form</field>
+        <field name="view_mode">kanban,list,form,calendar</field>
+    </record>
+
+    <!-- Action rapports -->
+    <record id="action_shop_order_report" model="ir.actions.act_window">
+        <field name="name">Rapports de Vente</field>
+        <field name="res_model">shop.order</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="domain">[('state', '!=', 'cancelled')]</field>
     </record>
 
     <!-- Séquence numéros de commande -->

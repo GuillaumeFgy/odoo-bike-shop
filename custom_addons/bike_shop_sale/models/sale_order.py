@@ -49,6 +49,16 @@ class ShopOrder(models.Model):
                     f"Date saisie : {order.date}, Date actuelle : {fields.Date.today()}"
                 )
 
+    @api.constrains('customer_name')
+    def _check_customer_name(self):
+        """Vérifie que le nom du client ne contient pas de chiffres"""
+        for order in self:
+            if order.customer_name and any(char.isdigit() for char in order.customer_name):
+                raise exceptions.ValidationError(
+                    f"Le nom du client '{order.customer_name}' n'est pas valide. "
+                    "Le nom ne peut pas contenir de chiffres."
+                )
+
     @api.constrains('customer_email')
     def _check_email(self):
         """Vérifie le format de l'email"""
