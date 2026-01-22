@@ -29,9 +29,14 @@ class ShopProduct(models.Model):
     @api.depends('price', 'cost')
     def _compute_margin(self):
         for product in self:
-            product.margin = product.price - product.cost
+            product.margin_amount = product.price - product.cost
+            if product.cost > 0:
+                product.margin_percent = ((product.price - product.cost) / product.cost) * 100
+            else:
+                product.margin_percent = 0.0
 
-    margin = fields.Float(string='Marge (€)', compute='_compute_margin')
+    margin_amount = fields.Float(string='Marge (€)', compute='_compute_margin', store=True)
+    margin_percent = fields.Float(string='Marge (%)', compute='_compute_margin', store=True)
 
     @api.constrains('price')
     def _check_price(self):
@@ -59,6 +64,31 @@ class ShopProduct(models.Model):
                 raise exceptions.ValidationError(
                     "La quantité en stock ne peut pas être négative."
                 )
+
+    @api.constrains('price', 'cost')
+    def _check_margin(self):
+        """Vérifie que la marge n'est pas négative (prix de vente >= prix d'achat)"""
+        for product in self:
+            if product.price < product.cost:
+                raise exceptions.ValidationError(
+                    "Le prix de vente ne peut pas être inférieur au prix d'achat. "
+                    f"Prix de vente: {product.price}€, Prix d'achat: {product.cost}€"
+                )
+
+    def unlink(self):
+        """Empêche la suppression des produits utilisés dans des commandes actives"""
+        for product in self:
+            # Chercher les lignes de commande qui utilisent ce produit
+            order_lines = self.env['shop.order.line'].search([
+                ('product_id', '=', product.id),
+                ('order_id.state', 'not in', ['cancelled', 'done'])
+            ])
+            if order_lines:
+                raise exceptions.ValidationError(
+                    f"Impossible de supprimer le produit '{product.name}' car il est utilisé "
+                    f"dans {len(order_lines)} ligne(s) de commande active(s)."
+                )
+        return super().unlink()
 
     def action_confirm_and_return(self):
         """Confirme le produit et retourne à la liste des produits"""

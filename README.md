@@ -33,10 +33,12 @@ MODULE LOCATION (bike_shop_rental) :
 
 MODULE VENTE (bike_shop_sale) :
 - Catalogue de produits (vélos, accessoires, pièces)
+- Calcul automatique de la marge (montant en € et pourcentage)
 - Commandes clients avec lignes de commande
 - Gestion automatique du stock (déduction à la confirmation)
 - Workflow : Brouillon > Confirmé > Facturé > Payé > Terminé
 - Validation des données et vérification du stock disponible
+- Suppression sécurisée des produits (protection si utilisés dans commandes actives)
 - Vue Kanban pour suivi visuel des commandes
 
 
@@ -64,6 +66,7 @@ VALIDATIONS :
 - Nom client : minimum 2 caractères, sans chiffres
 - Quantités positives
 - Prix positifs
+- Prix de vente supérieur ou égal au prix d'achat (marge positive)
 
 
 UTILISATION
@@ -79,6 +82,14 @@ LOCATION :
 7. Facturer puis Marquer comme payé
 
 VENTE :
+Gestion des produits :
+1. Bike Shop > Vente > Produits > Nouveau
+2. Saisir nom, type, prix de vente et prix d'achat
+3. La marge (€ et %) est calculée automatiquement
+4. Confirmer le produit
+5. Les produits peuvent être supprimés s'ils ne sont pas utilisés dans des commandes actives
+
+Gestion des commandes :
 1. Bike Shop > Vente > Commandes > Nouveau
 2. Saisir client + coordonnées
 3. Ajouter lignes de produits (quantités, prix auto-rempli)

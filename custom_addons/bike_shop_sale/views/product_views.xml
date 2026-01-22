@@ -13,7 +13,8 @@
                 <field name="product_type"/>
                 <field name="price" widget="monetary"/>
                 <field name="cost" widget="monetary"/>
-                <field name="margin" widget="percentage"/>
+                <field name="margin_amount" widget="monetary"/>
+                <field name="margin_percent"/>
                 <field name="quantity"/>
                 <field name="state" widget="badge"/>
             </list>
@@ -42,7 +43,8 @@
                         <group string="Prix et Stock">
                             <field name="price" widget="monetary"/>
                             <field name="cost" widget="monetary"/>
-                            <field name="margin" widget="percentage" readonly="1"/>
+                            <field name="margin_amount" widget="monetary" readonly="1"/>
+                            <field name="margin_percent" readonly="1"/>
                             <field name="quantity"/>
                         </group>
                     </group>
