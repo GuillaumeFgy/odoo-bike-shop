@@ -36,7 +36,7 @@ class ShopOrder(models.Model):
     @api.model
     def _group_expand_states(self, states, domain):
         """Force l'ordre des colonnes dans le kanban"""
-        return ['confirmed', 'done', 'invoiced', 'paid']
+        return ['draft', 'confirmed', 'invoiced', 'paid', 'done']
 
     # Facturation
     invoice_date = fields.Datetime(string='Date de Facturation', readonly=True)
@@ -131,16 +131,18 @@ class ShopOrder(models.Model):
                     line.product_id.quantity -= line.quantity
             order.state = 'confirmed'
 
-    def action_done(self):
-        for order in self:
-            order.state = 'done'
-
     def action_invoice(self):
         """Crée la facture"""
         for order in self:
-            if order.state == 'done':
+            if order.state == 'confirmed':
                 order.state = 'invoiced'
                 order.invoice_date = fields.Datetime.now()
+
+    def action_done(self):
+        """Marque la commande comme livrée"""
+        for order in self:
+            if order.state == 'paid':
+                order.state = 'done'
 
     def action_pay(self):
         """Marque la facture comme payée"""
@@ -151,6 +153,11 @@ class ShopOrder(models.Model):
 
     def action_cancel(self):
         for order in self:
+            # On ne peut annuler qu'avant facturation
+            if order.state not in ['draft', 'confirmed']:
+                raise exceptions.ValidationError(
+                    "Impossible d'annuler une commande déjà facturée, payée ou livrée."
+                )
             # Remettre le stock si annulé depuis confirmé
             if order.state == 'confirmed':
                 for line in order.line_ids:

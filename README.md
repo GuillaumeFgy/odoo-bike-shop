@@ -18,42 +18,110 @@ INSTALLATION
    Apps > Rechercher "Bike Shop" > Installer
 
 
-FONCTIONNALITES
----------------
+MODULES
+-------
+
+MODULE LOCATION (bike_shop_rental) :
+- Gestion des vélos de location par catégories (Ville, VTT, Route, Électrique, Enfant)
+- Contrats de location avec tarification flexible (horaire/journalier/hebdomadaire/mensuel)
+- Workflow complet : Brouillon > Confirmé > En cours > Terminé > Facturé > Payé
+- Suivi de disponibilité des vélos en temps réel
+- Validation des données client (email, téléphone, nom)
+- Contraintes métier (durées minimales selon type de location)
+- Rapports d'analyse des locations et taux d'occupation
+- Impression de contrats PDF
+
+MODULE VENTE (bike_shop_sale) :
+- Catalogue de produits (vélos, accessoires, pièces)
+- Commandes clients avec lignes de commande
+- Gestion automatique du stock (déduction à la confirmation)
+- Workflow : Brouillon > Confirmé > Facturé > Payé > Terminé
+- Validation des données et vérification du stock disponible
+- Vue Kanban pour suivi visuel des commandes
+
+
+FONCTIONNALITES PRINCIPALES
+---------------------------
 
 LOCATION :
-- Vélos par catégories (Ville, VTT, Route, Électrique, Enfant)
-- Contrats avec tarification (heure/jour/semaine/mois)
-- Suivi de disponibilité
-- Facturation
+- Sélection de vélo parmi les vélos disponibles uniquement
+- Calcul automatique des durées et tarifs
+- Validation des dates (pas de début dans le passé, fin après début)
+- Vérification de cohérence durée/type de location
+- Changement d'état du vélo lors du démarrage/retour
+- Gestion des annulations (uniquement avant démarrage)
 
 VENTE :
-- Produits : vélos, accessoires, pièces
-- Commandes clients
-- Gestion du stock
+- Création de commandes multi-produits
+- Vérification du stock avant confirmation
+- Déduction automatique du stock à la confirmation
+- Remise en stock lors de l'annulation
+- Impossibilité d'annuler une commande facturée
 
-RAPPORTS :
-- Analyse des locations
-- Taux d'occupation des vélos
+VALIDATIONS :
+- Format email : exemple@domaine.com
+- Format téléphone : minimum 10 chiffres (accepte +33, espaces, tirets)
+- Nom client : minimum 2 caractères, sans chiffres
+- Quantités positives
+- Prix positifs
 
 
 UTILISATION
 -----------
 
-Location :
-  Bike Shop > Location > Contrats
-  Nouveau > Client + Vélo + Dates > Confirmer > Démarrer > Terminer > Facturer
+LOCATION :
+1. Bike Shop > Location > Contrats > Nouveau
+2. Saisir client (existant ou nouveau) + coordonnées
+3. Sélectionner vélo disponible + dates + type de tarification
+4. Confirmer le contrat (vérifie disponibilité)
+5. Démarrer la location (vélo passe en "Loué")
+6. Terminer la location (vélo redevient disponible)
+7. Facturer puis Marquer comme payé
 
-Vente :
-  Bike Shop > Vente > Commandes
-  Nouveau > Client + Produits > Confirmer
+VENTE :
+1. Bike Shop > Vente > Commandes > Nouveau
+2. Saisir client + coordonnées
+3. Ajouter lignes de produits (quantités, prix auto-rempli)
+4. Confirmer (vérifie et déduit le stock)
+5. Facturer puis Marquer comme payé
+6. Marquer comme terminé
+
+RAPPORTS :
+- Bike Shop > Location > Rapports
+- Analyse des locations par période
+- Taux d'occupation par vélo/catégorie
 
 
 DONNEES DEMO
 ------------
 
-- 3 clients
-- 6 vélos de location
-- 3 contrats (en cours, confirmé, terminé)
-- 5 produits à vendre
-- 1 commande de vente
+- Partenaires de démonstration
+- 6 vélos de location avec tarifs configurés
+- Exemples de contrats de location
+- Produits à vendre (vélos, accessoires, pièces)
+- Exemples de commandes de vente
+
+
+STRUCTURE TECHNIQUE
+-------------------
+
+custom_addons/
+├── bike_shop_rental/
+│   ├── models/
+│   │   ├── bike.py (modèle Bike avec états et tarifs)
+│   │   ├── bike_category.py (catégories de vélos)
+│   │   ├── rental_order.py (contrats de location)
+│   │   └── rental_report.py (rapports d'analyse)
+│   ├── views/
+│   │   ├── bike_views.xml
+│   │   ├── rental_order_views.xml
+│   │   └── reports/
+│   └── data/ (catégories et données de démo)
+│
+└── bike_shop_sale/
+    ├── models/
+    │   ├── product.py (modèle ShopProduct personnalisé)
+    │   └── sale_order.py (modèle ShopOrder + ShopOrderLine)
+    └── views/
+        ├── product_views.xml
+        └── sale_order_views.xml

@@ -28,17 +28,17 @@
                 <header>
                     <button name="action_confirm" type="object" string="Confirmer"
                             class="oe_highlight" invisible="state != 'draft'"/>
-                    <button name="action_done" type="object" string="Terminer"
-                            class="oe_highlight" invisible="state != 'confirmed'"/>
                     <button name="action_invoice" type="object" string="Facturer"
-                            class="oe_highlight" invisible="state != 'done'"/>
+                            class="oe_highlight" invisible="state != 'confirmed'"/>
                     <button name="action_pay" type="object" string="Marquer Payé"
                             class="oe_highlight" invisible="state != 'invoiced'"/>
+                    <button name="action_done" type="object" string="Livrer"
+                            class="oe_highlight" invisible="state != 'paid'"/>
                     <button name="action_cancel" type="object" string="Annuler"
-                            invisible="state in ['done', 'invoiced', 'paid', 'cancelled']"/>
+                            invisible="state not in ['draft', 'confirmed']"/>
                     <button name="action_draft" type="object" string="Remettre en brouillon"
                             invisible="state != 'cancelled'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done,invoiced,paid"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,invoiced,paid,done"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
