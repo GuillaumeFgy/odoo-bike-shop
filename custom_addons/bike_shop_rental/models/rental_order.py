@@ -45,12 +45,17 @@ class RentalOrder(models.Model):
 
     # État
     state = fields.Selection([
-        ('cancelled', 'Annulé'),
-        ('ongoing', 'En Cours'),
-        ('confirmed', 'Confirmé'),
-        ('done', 'Terminé'),
         ('draft', 'Brouillon'),
-    ], string='État', default='draft', required=True)
+        ('confirmed', 'Confirmé'),
+        ('ongoing', 'En Cours'),
+        ('done', 'Terminé'),
+        ('cancelled', 'Annulé'),
+    ], string='État', default='draft', required=True, group_expand='_group_expand_states')
+
+    @api.model
+    def _group_expand_states(self, states, domain):
+        """Force l'ordre des colonnes dans le kanban"""
+        return ['confirmed', 'ongoing', 'done']
 
     # Notes
     notes = fields.Text(string='Notes')
