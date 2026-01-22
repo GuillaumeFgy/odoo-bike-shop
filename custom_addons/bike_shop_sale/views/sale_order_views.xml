@@ -7,8 +7,8 @@
         <field name="arch" type="xml">
             <list string="Commandes"
                   decoration-info="state=='draft'"
-                  decoration-success="state=='done'"
                   decoration-warning="state=='confirmed'"
+                  decoration-success="state in ['done', 'invoiced', 'paid']"
                   decoration-muted="state=='cancelled'">
                 <field name="name"/>
                 <field name="date"/>
@@ -30,11 +30,15 @@
                             class="oe_highlight" invisible="state != 'draft'"/>
                     <button name="action_done" type="object" string="Terminer"
                             class="oe_highlight" invisible="state != 'confirmed'"/>
+                    <button name="action_invoice" type="object" string="Facturer"
+                            class="oe_highlight" invisible="state != 'done'"/>
+                    <button name="action_pay" type="object" string="Marquer Payé"
+                            class="oe_highlight" invisible="state != 'invoiced'"/>
                     <button name="action_cancel" type="object" string="Annuler"
-                            invisible="state in ['done', 'cancelled']"/>
+                            invisible="state in ['done', 'invoiced', 'paid', 'cancelled']"/>
                     <button name="action_draft" type="object" string="Remettre en brouillon"
                             invisible="state != 'cancelled'"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done,invoiced,paid"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -49,6 +53,8 @@
                         </group>
                         <group string="Commande">
                             <field name="date"/>
+                            <field name="invoice_date" readonly="1" invisible="state not in ['invoiced', 'paid']"/>
+                            <field name="payment_date" readonly="1" invisible="state != 'paid'"/>
                         </group>
                     </group>
 
@@ -92,10 +98,12 @@
                         <div t-attf-class="rental-kanban-card state-#{record.state.raw_value} oe_kanban_global_click">
                             <div class="rental-card-header">
                                 <span class="rental-ref"><field name="name"/></span>
-                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'done' and 'available' or record.state.raw_value == 'confirmed' and 'rented' or 'maintenance'}">
+                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'done' and 'available' or record.state.raw_value == 'confirmed' and 'rented' or record.state.raw_value == 'paid' and 'available' or 'maintenance'}">
                                     <t t-if="record.state.raw_value == 'draft'">Brouillon</t>
                                     <t t-if="record.state.raw_value == 'confirmed'">Confirmé</t>
                                     <t t-if="record.state.raw_value == 'done'">Terminé</t>
+                                    <t t-if="record.state.raw_value == 'invoiced'">Facturé</t>
+                                    <t t-if="record.state.raw_value == 'paid'">Payé</t>
                                     <t t-if="record.state.raw_value == 'cancelled'">Annulé</t>
                                 </span>
                             </div>

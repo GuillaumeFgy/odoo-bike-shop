@@ -28,8 +28,19 @@ class ShopOrder(models.Model):
         ('draft', 'Brouillon'),
         ('confirmed', 'Confirmé'),
         ('done', 'Terminé'),
+        ('invoiced', 'Facturé'),
+        ('paid', 'Payé'),
         ('cancelled', 'Annulé'),
-    ], string='État', default='draft', required=True)
+    ], string='État', default='draft', required=True, group_expand='_group_expand_states')
+
+    @api.model
+    def _group_expand_states(self, states, domain):
+        """Force l'ordre des colonnes dans le kanban"""
+        return ['confirmed', 'done', 'invoiced', 'paid']
+
+    # Facturation
+    invoice_date = fields.Datetime(string='Date de Facturation', readonly=True)
+    payment_date = fields.Datetime(string='Date de Paiement', readonly=True)
 
     notes = fields.Text(string='Notes')
 
@@ -123,6 +134,20 @@ class ShopOrder(models.Model):
     def action_done(self):
         for order in self:
             order.state = 'done'
+
+    def action_invoice(self):
+        """Crée la facture"""
+        for order in self:
+            if order.state == 'done':
+                order.state = 'invoiced'
+                order.invoice_date = fields.Datetime.now()
+
+    def action_pay(self):
+        """Marque la facture comme payée"""
+        for order in self:
+            if order.state == 'invoiced':
+                order.state = 'paid'
+                order.payment_date = fields.Datetime.now()
 
     def action_cancel(self):
         for order in self:

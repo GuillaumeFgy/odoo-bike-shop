@@ -49,13 +49,19 @@ class RentalOrder(models.Model):
         ('confirmed', 'Confirmé'),
         ('ongoing', 'En Cours'),
         ('done', 'Terminé'),
+        ('invoiced', 'Facturé'),
+        ('paid', 'Payé'),
         ('cancelled', 'Annulé'),
     ], string='État', default='draft', required=True, group_expand='_group_expand_states')
 
     @api.model
     def _group_expand_states(self, states, domain):
         """Force l'ordre des colonnes dans le kanban"""
-        return ['confirmed', 'ongoing', 'done']
+        return ['confirmed', 'ongoing', 'done', 'invoiced', 'paid']
+
+    # Facturation
+    invoice_date = fields.Datetime(string='Date de Facturation', readonly=True)
+    payment_date = fields.Datetime(string='Date de Paiement', readonly=True)
 
     # Notes
     notes = fields.Text(string='Notes')
@@ -288,3 +294,17 @@ class RentalOrder(models.Model):
         for rental in self:
             if rental.state in ['draft', 'confirmed']:
                 rental.state = 'cancelled'
+
+    def action_invoice(self):
+        """Crée la facture"""
+        for rental in self:
+            if rental.state == 'done':
+                rental.state = 'invoiced'
+                rental.invoice_date = fields.Datetime.now()
+
+    def action_pay(self):
+        """Marque la facture comme payée"""
+        for rental in self:
+            if rental.state == 'invoiced':
+                rental.state = 'paid'
+                rental.payment_date = fields.Datetime.now()

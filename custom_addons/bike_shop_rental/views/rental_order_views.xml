@@ -8,8 +8,8 @@
             <list string="Contrats de Location"
                   decoration-info="state=='draft'"
                   decoration-primary="state=='confirmed'"
-                  decoration-success="state=='done'"
                   decoration-warning="state=='ongoing'"
+                  decoration-success="state in ['done', 'invoiced', 'paid']"
                   decoration-muted="state=='cancelled'">
                 <field name="name"/>
                 <field name="customer_name"/>
@@ -36,9 +36,13 @@
                             class="oe_highlight" invisible="state != 'confirmed'"/>
                     <button name="action_end_rental" type="object" string="Terminer"
                             class="oe_highlight" invisible="state != 'ongoing'"/>
+                    <button name="action_invoice" type="object" string="Facturer"
+                            class="oe_highlight" invisible="state != 'done'"/>
+                    <button name="action_pay" type="object" string="Marquer Payé"
+                            class="oe_highlight" invisible="state != 'invoiced'"/>
                     <button name="action_cancel" type="object" string="Annuler"
                             invisible="state not in ['draft', 'confirmed']"/>
-                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,ongoing,done"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,ongoing,done,invoiced,paid"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -61,7 +65,9 @@
                         <group string="Période">
                             <field name="start_date"/>
                             <field name="end_date"/>
-                            <field name="actual_return_date" readonly="1" invisible="state != 'done'"/>
+                            <field name="actual_return_date" readonly="1" invisible="state not in ['done', 'invoiced', 'paid']"/>
+                            <field name="invoice_date" readonly="1" invisible="state not in ['invoiced', 'paid']"/>
+                            <field name="payment_date" readonly="1" invisible="state != 'paid'"/>
                         </group>
                         <group string="Tarification">
                             <field name="rental_type" widget="radio"/>
@@ -99,11 +105,13 @@
                         <div t-attf-class="rental-kanban-card state-#{record.state.raw_value} oe_kanban_global_click">
                             <div class="rental-card-header">
                                 <span class="rental-ref"><field name="name"/></span>
-                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'available' and 'available' or record.state.raw_value == 'done' and 'available' or record.state.raw_value == 'ongoing' and 'rented' or 'maintenance'}">
+                                <span t-attf-class="bike-state-badge state-#{record.state.raw_value == 'available' and 'available' or record.state.raw_value == 'done' and 'available' or record.state.raw_value == 'ongoing' and 'rented' or record.state.raw_value == 'paid' and 'available' or 'maintenance'}">
                                     <t t-if="record.state.raw_value == 'draft'">Brouillon</t>
                                     <t t-if="record.state.raw_value == 'confirmed'">Confirmé</t>
                                     <t t-if="record.state.raw_value == 'ongoing'">En cours</t>
                                     <t t-if="record.state.raw_value == 'done'">Terminé</t>
+                                    <t t-if="record.state.raw_value == 'invoiced'">Facturé</t>
+                                    <t t-if="record.state.raw_value == 'paid'">Payé</t>
                                     <t t-if="record.state.raw_value == 'cancelled'">Annulé</t>
                                 </span>
                             </div>
